@@ -140,10 +140,16 @@ function main() {
 <li>
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#r%3D%2CGfxColor%2Cint"
+      <li><a class="reference" href="#r%2CGfxColor"
+    title="r(color: GfxColor): int"><wbr />r<span class="attachedType">GfxColor</span></a></li>
+  <li><a class="reference" href="#r%3D%2CGfxColor%2Cint"
     title="r=(color: var GfxColor; r: int)"><wbr />r=<span class="attachedType">GfxColor</span></a></li>
+  <li><a class="reference" href="#g%2CGfxColor"
+    title="g(color: GfxColor): int"><wbr />g<span class="attachedType">GfxColor</span></a></li>
   <li><a class="reference" href="#g%3D%2CGfxColor%2Cint"
     title="g=(color: var GfxColor; g: int)"><wbr />g=<span class="attachedType">GfxColor</span></a></li>
+  <li><a class="reference" href="#b%2CGfxColor"
+    title="b(color: GfxColor): int"><wbr />b<span class="attachedType">GfxColor</span></a></li>
   <li><a class="reference" href="#b%3D%2CGfxColor%2Cint"
     title="b=(color: var GfxColor; b: int)"><wbr />b=<span class="attachedType">GfxColor</span></a></li>
   <li><a class="reference" href="#readPal%2Cstring"
@@ -168,12 +174,6 @@ function main() {
     title="rgb8(r, g, b: int): GfxColor"><wbr />rgb8<span class="attachedType">GfxColor</span></a></li>
   <li><a class="reference" href="#rgb8%2Cint"
     title="rgb8(rgb: int): GfxColor"><wbr />rgb8<span class="attachedType">GfxColor</span></a></li>
-  <li><a class="reference" href="#r%2CGfxColor"
-    title="r(color: GfxColor): int"><wbr />r<span class="attachedType">GfxColor</span></a></li>
-  <li><a class="reference" href="#g%2CGfxColor"
-    title="g(color: GfxColor): int"><wbr />g<span class="attachedType">GfxColor</span></a></li>
-  <li><a class="reference" href="#b%2CGfxColor"
-    title="b(color: GfxColor): int"><wbr />b<span class="attachedType">GfxColor</span></a></li>
   <li><a class="reference" href="#swap4bpp%2Cuint8"
     title="swap4bpp(ab: uint8): uint8"><wbr />swap4bpp<span class="attachedType"></span></a></li>
   <li><a class="reference" href="#swap2bpp%2Cuint8"
@@ -202,7 +202,8 @@ h4 {
   margin-bottom: 0.8em
 }
 .see-below {
-  margin-top: -3.25em;
+  /*margin-top: -3.25em;*/
+  margin-top: -3.5em;
 }
 </style><p><a class="reference external" href="../trick.html">↩ back to overview</a></p>
 <p>Module for converting between PNG and raw GBA/NDS image data. </p>
@@ -282,25 +283,46 @@ A color which is different to all other colors due to the unused bit. It's recom
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
+<a id="r,GfxColor"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#r%2CGfxColor"><span class="Identifier">r</span></a><span class="Other">(</span><span class="Identifier">color</span><span class="Other">:</span> <a href="gfxconvert.html#GfxColor"><span class="Identifier">GfxColor</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">noSideEffect</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+<div class="see-below"></div>
+
+</dd>
 <a id="r=,GfxColor,int"></a>
 <dt><pre><span class="Keyword">proc</span> <a href="#r%3D%2CGfxColor%2Cint"><span class="Identifier">r=</span></a><span class="Other">(</span><span class="Identifier">color</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="gfxconvert.html#GfxColor"><span class="Identifier">GfxColor</span></a><span class="Other">;</span> <span class="Identifier">r</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
-Set the red component of a 15-bit color.
+Red component of a 15-bit color.
+
+</dd>
+<a id="g,GfxColor"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#g%2CGfxColor"><span class="Identifier">g</span></a><span class="Other">(</span><span class="Identifier">color</span><span class="Other">:</span> <a href="gfxconvert.html#GfxColor"><span class="Identifier">GfxColor</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">noSideEffect</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+<div class="see-below"></div>
 
 </dd>
 <a id="g=,GfxColor,int"></a>
 <dt><pre><span class="Keyword">proc</span> <a href="#g%3D%2CGfxColor%2Cint"><span class="Identifier">g=</span></a><span class="Other">(</span><span class="Identifier">color</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="gfxconvert.html#GfxColor"><span class="Identifier">GfxColor</span></a><span class="Other">;</span> <span class="Identifier">g</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
-Set the green component of a 15-bit color.
+Green component of a 15-bit color.
+
+</dd>
+<a id="b,GfxColor"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#b%2CGfxColor"><span class="Identifier">b</span></a><span class="Other">(</span><span class="Identifier">color</span><span class="Other">:</span> <a href="gfxconvert.html#GfxColor"><span class="Identifier">GfxColor</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">noSideEffect</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+<div class="see-below"></div>
 
 </dd>
 <a id="b=,GfxColor,int"></a>
 <dt><pre><span class="Keyword">proc</span> <a href="#b%3D%2CGfxColor%2Cint"><span class="Identifier">b=</span></a><span class="Other">(</span><span class="Identifier">color</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="gfxconvert.html#GfxColor"><span class="Identifier">GfxColor</span></a><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
-Set the blue component of a 15-bit color.
+Blue component of a 15-bit color.
 
 </dd>
 <a id="readPal,string"></a>
@@ -371,27 +393,6 @@ Create a 15-bit BGR color, using 8-bit components
 Create a 15-bit BGR color from a 24-bit RGB color of the form 0xRRGGBB
 
 </dd>
-<a id="r,GfxColor"></a>
-<dt><pre><span class="Keyword">func</span> <a href="#r%2CGfxColor"><span class="Identifier">r</span></a><span class="Other">(</span><span class="Identifier">color</span><span class="Other">:</span> <a href="gfxconvert.html#GfxColor"><span class="Identifier">GfxColor</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
-<dd>
-
-Get the red component of a 15-bit color.
-
-</dd>
-<a id="g,GfxColor"></a>
-<dt><pre><span class="Keyword">func</span> <a href="#g%2CGfxColor"><span class="Identifier">g</span></a><span class="Other">(</span><span class="Identifier">color</span><span class="Other">:</span> <a href="gfxconvert.html#GfxColor"><span class="Identifier">GfxColor</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
-<dd>
-
-Get the green component of a 15-bit color.
-
-</dd>
-<a id="b,GfxColor"></a>
-<dt><pre><span class="Keyword">func</span> <a href="#b%2CGfxColor"><span class="Identifier">b</span></a><span class="Other">(</span><span class="Identifier">color</span><span class="Other">:</span> <a href="gfxconvert.html#GfxColor"><span class="Identifier">GfxColor</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
-<dd>
-
-Get the blue component of a 15-bit color.
-
-</dd>
 <a id="swap4bpp,uint8"></a>
 <dt><pre><span class="Keyword">func</span> <a href="#swap4bpp%2Cuint8"><span class="Identifier">swap4bpp</span></a><span class="Other">(</span><span class="Identifier">ab</span><span class="Other">:</span> <span class="Identifier">uint8</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">uint8</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
@@ -435,7 +436,7 @@ Used to unravel a tiled space into a linear array. If each index in the space co
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2020-04-21 00:09:11 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2020-04-21 21:42:31 UTC</small>
       </div>
     </div>
   </div>

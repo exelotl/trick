@@ -126,14 +126,14 @@ h4 {
   margin-bottom: 0.8em
 }
 .see-below {
-  margin-top: -3.25em;
+  /*margin-top: -3.25em;*/
+  margin-top: -3.5em;
 }
 </style><p>Trick is a library for GBA image conversion and more.</p>
 <p><pre class="listing"><span class="Keyword">import</span> <span class="Identifier">trick</span>                       <span class="Comment"># import everything</span>
 <span class="Keyword">import</span> <span class="Identifier">trick</span><span class="Operator">/</span><span class="Punctuation">[</span><span class="Identifier">common</span><span class="Punctuation">,</span> <span class="Identifier">gfxconvert</span><span class="Punctuation">]</span>  <span class="Comment"># import individual modules</span>
 </pre></p>
 <p>See below for an API overview of each module.</p>
-<p>A note about parameter columns: names are written in <em>italics</em>, types are not.</p>
 
 <h1><a class="toc-backref" id="common" href="#common">common</a></h1><p>This module contains some general utilitites for working with data.</p>
 <p><a class="reference external" href="trick/common.html">Go to full docs ⇒</a></p>
@@ -206,13 +206,12 @@ h4 {
 <tr><td><a class="reference external" href="trick/palbuilder.html#reducePalettes,seq[IntSet]">toPalette</a></td><td>IntSet</td><td>GfxPalette</td><td>Convert an IntSet to a list of 15-bit colors</td></tr>
 <tr><td><a class="reference external" href="trick/palbuilder.html#joinPalettes,seq[GfxPalette]">joinPalettes</a></td><td>seq[GfxPalette]</td><td>GfxPalette</td><td>Concatenate several palettes into one (with padding)</td></tr>
 </table>
-<h1><a class="toc-backref" id="mmutil" href="#mmutil">mmutil</a></h1><p>Uses <a class="reference external" href="https://github.com/devkitPro/mmutil">mmutil</a> to produce a soundbank for use with the <a class="reference external" href="https://maxmod.devkitpro.org/">Maxmod</a> sound system.</p>
-<p>The soundbank data file is then converted to C, and the header is converted to Nim, for use in your game.</p>
+<h1><a class="toc-backref" id="mmutil" href="#mmutil">mmutil</a></h1><p>Uses the <a class="reference external" href="https://maxmod.devkitpro.org/">Maxmod</a> utility program () to produce a soundbank, which is then converted to C. The soundbank header is converted to Nim, for use in your game.</p>
 <p><a class="reference external" href="trick/mmutil.html">Go to full docs ⇒</a></p>
 <h4>Procedures</h4><table border="1" class="docutils"><tr><th>Name</th><th>Parameters</th><th>Returns</th><th>Summary</th></tr>
 <tr><td><a class="reference external" href="trick/mmutil.html#makeSoundbank,string,string,">makeSoundbank</a></td><td><p><em>nimOutputPath</em>, <em>cOutputPath</em>,<br /><em>inputFiles</em>, <em>nds=false</em><br /></p></td><td></td><td>Create a soundbank from a list of audio files </td></tr>
 </table><h4>Variables</h4><table border="1" class="docutils"><tr><th>Name</th><th>Type</th><th>Summary</th></tr>
-<tr><td><a class="reference external" href="trick/mmutil.html#mmutilPath">mmutilPath</a></td><td>string</td><td>Location of the <tt class="docutils literal"><span class="pre">mmutil</span></tt> executable. You shouldn't need to change this.</td></tr>
+<tr><td><a class="reference external" href="trick/mmutil.html#mmutilPath">mmutilPath</a></td><td>string</td><td>Location of the <a class="reference external" href="https://github.com/devkitPro/mmutil">mmutil</a> executable. You shouldn't need to change this.</td></tr>
 </table></p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
@@ -232,7 +231,7 @@ h4 {
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2020-04-21 00:09:12 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2020-04-21 21:42:31 UTC</small>
       </div>
     </div>
   </div>

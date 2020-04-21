@@ -132,7 +132,8 @@ h4 {
   margin-bottom: 0.8em
 }
 .see-below {
-  margin-top: -3.25em;
+  /*margin-top: -3.25em;*/
+  margin-top: -3.5em;
 }
 </style><p><a class="reference external" href="../trick.html">↩ back to overview</a> </p>
 </p>
@@ -149,7 +150,7 @@ h4 {
 <dd>
 
 <p>Path to <tt class="docutils literal"><span class="pre">mmutil</span></tt> executable.</p>
-<p>You may wish to override this if you're not using devkitARM or if <tt class="docutils literal"><span class="pre">mmutil</span></tt> is not in your system's PATH.</p>
+<p>You may wish to override this if you're not using devkitARM and <tt class="docutils literal"><span class="pre">mmutil</span></tt> is not in your system's PATH.</p>
 
 
 </dd>
@@ -163,11 +164,17 @@ h4 {
                   <span class="Identifier">inputFiles</span><span class="Other">:</span> <span class="Identifier">string</span> <span class="Operator">|</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">nds</span> <span class="Other">=</span> <span class="Identifier">false</span><span class="Other">)</span></pre></dt>
 <dd>
 
-<p>Invoke the Maxmod utility program (mmutil), to convert music and sound effects into a soundbank. The output produced by mmutil is then converted into C + Nim code which can be used in your game.</p>
-<p><tt class="docutils literal"><span class="pre">nimOutputPath</span></tt> is a target Nim file to be imported and used in your game code.</p>
-<p><tt class="docutils literal"><span class="pre">cOutputPath</span></tt> is a target C file to contain read-only data, which will be linked into the final ROM.</p>
-<p><tt class="docutils literal"><span class="pre">inputFiles</span></tt> can be either a wildcard pattern, or an sequence/array of file names. Valid file formats are: <tt class="docutils literal"><span class="pre">.mod</span></tt>, <tt class="docutils literal"><span class="pre">.s3m</span></tt>, <tt class="docutils literal"><span class="pre">.xm</span></tt>, <tt class="docutils literal"><span class="pre">.it</span></tt>, <tt class="docutils literal"><span class="pre">.wav</span></tt></p>
-<p><tt class="docutils literal"><span class="pre">nds</span></tt> flag can be used if you want to produce a soundbank for Nintendo DS instead of GBA.</p>
+<p>Invoke the Maxmod utility program (mmutil), to convert music and sound effects into a soundbank. The output produced by mmutil is then converted into C and Nim code which can be used in your game.</p>
+<p><strong>Parameters:</strong></p>
+<dl class="docutils"><dt>nimOutputPath</dt>
+<dd>Target Nim file to be imported and used in your game code.</dd>
+<dt>cOutputPath</dt>
+<dd>Target C file to contain read-only data, which will be linked into the final ROM.</dd>
+<dt>inputFiles</dt>
+<dd><p>Can be either a wildcard pattern, or an sequence/array of file names.<br />Valid file formats are: <tt class="docutils literal"><span class="pre">.mod</span></tt>, <tt class="docutils literal"><span class="pre">.s3m</span></tt>, <tt class="docutils literal"><span class="pre">.xm</span></tt>, <tt class="docutils literal"><span class="pre">.it</span></tt>, <tt class="docutils literal"><span class="pre">.wav</span></tt><br /></p></dd>
+<dt>nds</dt>
+<dd>This flag can be used if you want to produce a soundbank for Nintendo DS instead of GBA.</dd>
+</dl>
 <p><strong>Example:</strong></p>
 <p>Conversion code:</p>
 <pre class="listing"><span class="Keyword">import</span> <span class="Identifier">trick</span><span class="Operator">/</span><span class="Identifier">mmutil</span>
@@ -199,7 +206,7 @@ h4 {
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2020-04-21 00:09:11 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2020-04-21 21:42:31 UTC</small>
       </div>
     </div>
   </div>
