@@ -74,31 +74,33 @@ func rgb8*(rgb: int): GfxColor =
     (((rgb and 0x00ff00) shr 11) shl 5) or
     (((rgb and 0x0000ff) shr 3) shl 10)).GfxColor
 
-func r*(color: GfxColor): int =
-  ## Get the red component of a 15-bit color.
+proc r*(color: GfxColor): int {.noSideEffect.} =
+  ## .. include:: doc/see-below.rst
   color.int and 0x001F
 
-func g*(color: GfxColor): int =
-  ## Get the green component of a 15-bit color.
-  (color.int shr 5) and 0x001F
-
-func b*(color: GfxColor): int =
-  ## Get the blue component of a 15-bit color.
-  (color.int shr 10) and 0x001F
-
 proc `r=`*(color: var GfxColor, r: int) =
-  ## Set the red component of a 15-bit color.
+  ## Red component of a 15-bit color.
   color = (color and 0b1_11111_11111_00000) or (r.uint16 and 0x001F)
 
+
+proc g*(color: GfxColor): int {.noSideEffect.} =
+  ## .. include:: doc/see-below.rst
+  (color.int shr 5) and 0x001F
+
 proc `g=`*(color: var GfxColor, g: int) =
-  ## Set the green component of a 15-bit color.
+  ## Green component of a 15-bit color.
   color = (color and 0b1_11111_00000_11111) or (g.uint16 and 0x001F) shl 5
 
+
+proc b*(color: GfxColor): int {.noSideEffect.} =
+  ## .. include:: doc/see-below.rst
+  (color.int shr 10) and 0x001F
+
 proc `b=`*(color: var GfxColor, b: int) =
-  ## Set the blue component of a 15-bit color.
+  ## Blue component of a 15-bit color.
   color = (color and 0b1_00000_11111_11111) or (b.uint16 and 0x001F) shl 10
 
-  
+
 proc readPal*(palFile: string): GfxPalette =
   ## Read a palette from a binary file.
   let palData = readFile(palFile)
