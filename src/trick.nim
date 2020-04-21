@@ -176,7 +176,7 @@ Name                                                                     Paramet
 mmutil
 ------
 
-Uses the `Maxmod<https://maxmod.devkitpro.org/>`_ utility program ()
+Uses the `Maxmod<https://maxmod.devkitpro.org/>`_ utility program (`mmutil<https://github.com/devkitPro/mmutil>`_)
 to produce a soundbank, which is then converted to C. The soundbank header is converted to Nim, for use in your game.
 
 `Go to full docs ⇒<trick/mmutil.html>`_
