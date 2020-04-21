@@ -37,7 +37,7 @@ Installation
 $ nimble install trick
 ```
 
-Then
+Usage
 
 ```nim
 import trick
@@ -140,14 +140,16 @@ memcpy32(addr tileMemObj[0], addr marioImg, marioImg.len div sizeof(uint32))
 
 ### Soundbank conversion
 
-Create a soundbank using `mmutil`. The constants are converted to Nim and the data is converted to C.
+Create a Maxmod soundbank via `mmutil`. The constants are converted to Nim and the data is converted to C.
+
+You can pass a list of music/sfx files:
 
 ```nim
 let soundFiles = ["audio/mysong.xm", "audio/jump.wav"]
 makeSoundbank("source/soundbank.nim", "data/soundbank.c", soundFiles)
 ```
 
-Or convert all files in a directory:
+Or use a wildcard pattern to process all files in a directory:
 
 ```nim
 makeSoundbank("source/soundbank.nim", "data/soundbank.c", "audio/*")

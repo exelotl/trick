@@ -11,8 +11,6 @@ import trick/[common, gfxconvert]  # import individual modules
 
 See below for an API overview of each module.
 
-A note about parameter columns: names are written in *italics*, types are not.
-
 
 common
 ------
@@ -178,10 +176,8 @@ Name                                                                     Paramet
 mmutil
 ------
 
-Uses `mmutil<https://github.com/devkitPro/mmutil>`_ to produce a soundbank for use with
-the `Maxmod<https://maxmod.devkitpro.org/>`_ sound system.
-
-The soundbank data file is then converted to C, and the header is converted to Nim, for use in your game.
+Uses the `Maxmod<https://maxmod.devkitpro.org/>`_ utility program ()
+to produce a soundbank, which is then converted to C. The soundbank header is converted to Nim, for use in your game.
 
 `Go to full docs ⇒<trick/mmutil.html>`_
 
@@ -201,7 +197,7 @@ Name                                                              Parameters    
 ================================================  =============  =====================================================
 Name                                              Type           Summary
 ================================================  =============  =====================================================
-`mmutilPath<trick/mmutil.html#mmutilPath>`_       string         Location of the `mmutil` executable. You shouldn't need to change this.
+`mmutilPath<trick/mmutil.html#mmutilPath>`_       string         Location of the `mmutil<https://github.com/devkitPro/mmutil>`_ executable. You shouldn't need to change this.
 ================================================  =============  =====================================================
 
 ]##

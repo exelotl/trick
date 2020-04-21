@@ -10,7 +10,7 @@ var mmutilPath*: string
   ## Path to `mmutil` executable.
   ## 
   ## You may wish to override this if you're not using devkitARM
-  ## or if `mmutil` is not in your system's PATH.
+  ## and `mmutil` is not in your system's PATH.
 
 # Find mmutil in system path
 mmutilPath = findExe("mmutil")
@@ -35,16 +35,22 @@ proc mmutil(args: string) =
 
 proc makeSoundbank*(nimOutputPath, cOutputPath: string, inputFiles: string | openarray[string], nds = false) =
   ## Invoke the Maxmod utility program (mmutil), to convert music and sound effects into a soundbank.
-  ## The output produced by mmutil is then converted into C + Nim code which can be used in your game.
+  ## The output produced by mmutil is then converted into C and Nim code which can be used in your game.
   ## 
-  ## `nimOutputPath` is a target Nim file to be imported and used in your game code.
+  ## **Parameters:**
   ## 
-  ## `cOutputPath` is a target C file to contain read-only data, which will be linked into the final ROM.
+  ## nimOutputPath
+  ##   Target Nim file to be imported and used in your game code.
   ## 
-  ## `inputFiles` can be either a wildcard pattern, or an sequence/array of file names.
-  ## Valid file formats are: `.mod`, `.s3m`, `.xm`, `.it`, `.wav`
+  ## cOutputPath
+  ##   Target C file to contain read-only data, which will be linked into the final ROM.
   ## 
-  ## `nds` flag can be used if you want to produce a soundbank for Nintendo DS instead of GBA.
+  ## inputFiles
+  ##   | Can be either a wildcard pattern, or an sequence/array of file names.
+  ##   | Valid file formats are: `.mod`, `.s3m`, `.xm`, `.it`, `.wav`
+  ## 
+  ## nds
+  ##   This flag can be used if you want to produce a soundbank for Nintendo DS instead of GBA.
   ## 
   ## **Example:**
   ## 
