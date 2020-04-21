@@ -1,6 +1,6 @@
 ## Trick ;)
 
-- [API Documentation](https://exelotl.github.io/trick)
+- [API Documentation](https://exelotl.github.io/trick/trick.html)
 
 Trick is a library for GBA and NDS asset conversion in Nim.
 
