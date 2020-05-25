@@ -238,7 +238,7 @@ proc clear*(tile: var SomeTile) =
 # ---------------
 # Return IntSets so they can be passed to palettebuilder
 
-proc getTilePalettes*(tiles16: seq[Tile16]): seq[IntSet] =
+proc getPalettesFromTiles*(tiles16: seq[Tile16]): seq[IntSet] =
   ## Create a list containing one palette for each tile in a list of 15bpp direct color tiles.
   ## 
   ## Each palette is represented as `IntSet` for performance reasons. You can use
@@ -288,7 +288,7 @@ proc toBg4*(bg16: var Bg16): Bg4 =
   ## Convert a direct color 15bpp background to a paletted 4bpp background.
   
   # figure out a set of 16-color palettes, and which palette each tile in the tileset should have.
-  let (mergedPals, palNums) = reducePalettes(getTilePalettes(bg16.img))
+  let (mergedPals, palNums) = reducePalettes(getPalettesFromTiles(bg16.img))
   
   # convert the tileset from 15bpp to 4bpp
   var img4 = newSeq[Tile4](bg16.img.len)

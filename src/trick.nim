@@ -139,7 +139,7 @@ Name                                                                      Parame
 `loadBg16<trick/bgconvert.html#loadBg16,string>`_                         *filename*           Bg16               Load a PNG as a 15bpp (direct color) tiled background
 `toBg4<trick/bgconvert.html#toBg4,Bg16>`_                                 Bg16                 Bg4                Convert a 15bpp (direct color) background to 4bpp (paletted)
 `reduce<trick/bgconvert.html#reduce,seq[T]>`_                             *tiles*              (*tiles*, *map*)   Remove duplicates from a list of tiles, and build a tile map
-`getTilePalettes<trick/bgconvert.html#getTilePalettes>`_                  *tiles16*            seq[IntSet]        Get a list of palettes from a list of 15bpp tiles
+`getPalettesFromTiles<trick/bgconvert.html#getPalettesFromTiles>`_        *tiles16*            seq[IntSet]        Get a list of palettes from a list of 15bpp tiles
 `toScreenBlocks<trick/bgconvert.html#toScreenBlocks,seq[ScrEntry],int>`_  *map*, *w*           seq[Screenblock]   Arrange a map into screenblocks (chunks of 32x32 tiles)
 `flipX<trick/bgconvert.html#flipX,T>`_                                    *tile*               *tile*             Flip a tile horizontally
 `flipY<trick/bgconvert.html#flipY,T>`_                                    *tile*               *tile*             Flip a tile vertically
