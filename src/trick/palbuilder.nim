@@ -94,12 +94,11 @@ proc reducePalettes*(tilePals: seq[IntSet]): tuple[mergedPals: seq[GfxPalette], 
           ## Merging would result in too many colors, skip
           continue
         
-        let commonColors = srcPal * destPal
-        let srcOnlyColors = srcPal - destPal
-        let destOnlyColors = destPal - srcPal
+        let commonColors = intersection(srcPal, destPal)
+        let uncommonColors = symmetricDifference(srcPal, destPal)
         
         # heuristic: prefer palettes with more colors in common and less different colors
-        let rating = commonColors.len - min(srcOnlyColors.len, destOnlyColors.len)
+        let rating = commonColors.len - uncommonColors.len
         if rating > bestRating:
           bestRating = rating
           bestRatedDest = i
