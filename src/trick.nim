@@ -167,8 +167,9 @@ used in place of GfxPalette, for performance reasons.
 =======================================================================  ===============  ===========================  ====================================================
 Name                                                                     Parameters       Returns                      Summary
 =======================================================================  ===============  ===========================  ====================================================
-`reducePalettes<trick/palbuilder.html#toPalette,IntSet>`_                seq[IntSet]      (seq[GfxPalette], seq[int])  Try to produce a minimal list of 16-color palettes
-`toPalette<trick/palbuilder.html#reducePalettes,seq[IntSet]>`_           IntSet           GfxPalette                   Convert an IntSet to a list of 15-bit colors
+`reducePalettes<trick/palbuilder.html#reducePalettes,seq[IntSet]>`_      seq[IntSet]      (seq[GfxPalette], seq[int])  Try to produce a minimal list of 16-color palettes
+`toPalette<trick/palbuilder.html#toPalette,IntSet>`_                     IntSet           GfxPalette                   Convert an IntSet to a list of colors
+`toIntSet<trick/palbuilder.html#toIntSet,GfxPalette>`_                   GfxPalette       IntSet                       Convert a list of colors to an IntSet
 `joinPalettes<trick/palbuilder.html#joinPalettes,seq[GfxPalette]>`_      seq[GfxPalette]  GfxPalette                   Concatenate several palettes into one (with padding)
 =======================================================================  ===============  ===========================  ====================================================
 

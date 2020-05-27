@@ -17,6 +17,11 @@ proc toPalette*(palSet: IntSet): GfxPalette =
     else:
       result.add(color)
 
+proc toIntSet*(pal: GfxPalette): IntSet =
+  ## Convert a list of colors to an IntSet, for efficient comparison and merging.
+  for color in pal:
+    result.incl(color.int)
+
 proc reducePalettes*(tilePals: seq[IntSet]): tuple[mergedPals: seq[GfxPalette], palNums: seq[int]] =
   ## Given a list of individual palettes for each tile in the map
   ## Merge these down into a set of palettes and a list of indexes
@@ -89,11 +94,12 @@ proc reducePalettes*(tilePals: seq[IntSet]): tuple[mergedPals: seq[GfxPalette], 
           ## Merging would result in too many colors, skip
           continue
         
-        let commonColors = intersection(srcPal, destPal)
-        let uncommonColors = symmetricDifference(srcPal, destPal)
+        let commonColors = srcPal * destPal
+        let srcOnlyColors = srcPal - destPal
+        let destOnlyColors = destPal - srcPal
         
         # heuristic: prefer palettes with more colors in common and less different colors
-        var rating = commonColors.len - uncommonColors.len
+        let rating = commonColors.len - min(srcOnlyColors.len, destOnlyColors.len)
         if rating > bestRating:
           bestRating = rating
           bestRatedDest = i
