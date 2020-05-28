@@ -108,6 +108,8 @@ function main() {
   <ul class="simple simple-toc-section">
       <li><a class="reference" href="#toPalette%2CIntSet"
     title="toPalette(palSet: IntSet): GfxPalette"><wbr />to<wbr />Palette<span class="attachedType"></span></a></li>
+  <li><a class="reference" href="#toIntSet%2CGfxPalette"
+    title="toIntSet(pal: GfxPalette): IntSet"><wbr />to<wbr />Int<wbr />Set<span class="attachedType"></span></a></li>
   <li><a class="reference" href="#reducePalettes%2Cseq%5BIntSet%5D"
     title="reducePalettes(tilePals: seq[IntSet]): tuple[mergedPals: seq[GfxPalette],
     palNums: seq[int]]"><wbr />reduce<wbr />Palettes<span class="attachedType"></span></a></li>
@@ -148,6 +150,13 @@ h4 {
 Convert an IntSet to a list of 15-bit colors, while ensuring that the trasparent color (<tt class="docutils literal"><span class="pre">clrEmpty</span></tt>) is always first.
 
 </dd>
+<a id="toIntSet,GfxPalette"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#toIntSet%2CGfxPalette"><span class="Identifier">toIntSet</span></a><span class="Other">(</span><span class="Identifier">pal</span><span class="Other">:</span> <a href="gfxconvert.html#GfxPalette"><span class="Identifier">GfxPalette</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">IntSet</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+Convert a list of colors to an IntSet, for efficient comparison and merging.
+
+</dd>
 <a id="reducePalettes,seq[IntSet]"></a>
 <dt><pre><span class="Keyword">proc</span> <a href="#reducePalettes%2Cseq%5BIntSet%5D"><span class="Identifier">reducePalettes</span></a><span class="Other">(</span><span class="Identifier">tilePals</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">IntSet</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">mergedPals</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="gfxconvert.html#GfxPalette"><span class="Identifier">GfxPalette</span></a><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">palNums</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span><span class="Other">]</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
@@ -175,7 +184,7 @@ Given a list of individual palettes for each tile in the map Merge these down in
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2020-04-21 21:49:52 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2020-05-28 21:57:50 UTC</small>
       </div>
     </div>
   </div>

@@ -147,8 +147,8 @@ function main() {
     title="toScreenBlocks(map: seq[ScrEntry]; w: int): seq[Screenblock]"><wbr />to<wbr />Screen<wbr />Blocks<span class="attachedType">ScrEntry</span></a></li>
   <li><a class="reference" href="#clear%2CSomeTile"
     title="clear(tile: var SomeTile)"><wbr />clear<span class="attachedType">SomeTile</span></a></li>
-  <li><a class="reference" href="#getTilePalettes%2Cseq%5BTile16%5D"
-    title="getTilePalettes(tiles16: seq[Tile16]): seq[IntSet]"><wbr />get<wbr />Tile<wbr />Palettes<span class="attachedType">Tile16</span></a></li>
+  <li><a class="reference" href="#getPalettesFromTiles%2Cseq%5BTile16%5D"
+    title="getPalettesFromTiles(tiles16: seq[Tile16]): seq[IntSet]"><wbr />get<wbr />Palettes<wbr />From<wbr />Tiles<span class="attachedType">Tile16</span></a></li>
   <li><a class="reference" href="#loadBg16%2Cstring"
     title="loadBg16(filename: string): Bg16"><wbr />load<wbr />Bg16<span class="attachedType">Bg16</span></a></li>
   <li><a class="reference" href="#toBg4%2CBg16"
@@ -341,9 +341,9 @@ Set all pixels in a tile to transparent.<ul class="simple"><li>For 4bpp and 8bpp
 
 
 </dd>
-<a id="getTilePalettes,seq[Tile16]"></a>
-<dt><pre><span class="Keyword">proc</span> <a href="#getTilePalettes%2Cseq%5BTile16%5D"><span class="Identifier">getTilePalettes</span></a><span class="Other">(</span><span class="Identifier">tiles16</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="bgconvert.html#Tile16"><span class="Identifier">Tile16</span></a><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">IntSet</span><span class="Other">]</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">AssertionError</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<a id="getPalettesFromTiles,seq[Tile16]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#getPalettesFromTiles%2Cseq%5BTile16%5D"><span class="Identifier">getPalettesFromTiles</span></a><span class="Other">(</span><span class="Identifier">tiles16</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="bgconvert.html#Tile16"><span class="Identifier">Tile16</span></a><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">IntSet</span><span class="Other">]</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma">
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">AssertionError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
 <p>Create a list containing one palette for each tile in a list of 15bpp direct color tiles.</p>
@@ -448,7 +448,7 @@ Which palette is used by this entry (when working with 4bpp tiles)
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2020-04-21 21:49:52 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2020-05-28 21:57:50 UTC</small>
       </div>
     </div>
   </div>
