@@ -5,7 +5,7 @@
 Module for converting between PNG and raw GBA/NDS image data.
 ]##
 
-import nimpng
+import nimPNG
 import streams
 
 type

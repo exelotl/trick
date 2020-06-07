@@ -1,6 +1,6 @@
 import common, gfxconvert, palbuilder
 import tables, hashes, strformat, intsets
-import nimpng
+import nimPNG
 
 ##[
 .. include:: doc/styles.rst
