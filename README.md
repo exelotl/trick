@@ -114,7 +114,7 @@ const char *marioImg = {imgStringLit};
 # output Nim source code
 writeFile("source/gfxdata.nim", fmt"""
 {{.compile: "gfxdata.c".}}
-var marioImg* {{.importc, extern:"marioImg", codegenDecl:"const $# $#".}}: array[{data.len}, uint8]
+var marioImg* {{.importc, extern:"marioImg", codegenDecl:"extern const $# $#".}}: array[{data.len}, uint8]
 """)
 ```
 
