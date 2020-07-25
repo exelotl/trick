@@ -285,3 +285,9 @@ proc pngToBin*(filename: string, conf: var GfxInfo, buildPal: bool): string =
   of gfxBitmap:
     result = data
   
+
+proc readPng*(filename: string): PNG[string] =
+  ## Load a `PNG` object instead of the less-flexible `PNGResult` that nimPNG usually returns.
+  var stream = openFileStream(filename, fmRead)
+  result = decodePNG(string, stream)
+  stream.close()

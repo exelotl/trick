@@ -33,10 +33,17 @@ type
   Bg16* = object
     ## A 15bpp (i.e. direct color, 5 bits per channel) tiled background.
     ## 
-    ## This is not a real format that the GBA uses, but is useful as an intermediate representation before converting to 4bpp.
+    ## This is not a real format that the GBA uses, but is useful as an intermediate representation before converting to 4bpp or 8bpp.
     w*, h*: int
     img*: seq[Tile16]
     map*: seq[ScrEntry]
+  
+  Bg8* = object
+    ## An 8bpp tiled background.
+    w*, h*: int             ## Dimensions in tiles
+    img*: seq[Tile8]        ## Tile/char image data
+    map*: seq[ScrEntry]     ## Map entries
+    pal*: GfxPalette        ## Palette with up to 256 colors
   
   Bg4* = object
     ## A 4bpp tiled background with a list of palettes.
@@ -157,13 +164,22 @@ proc flipY*[T: SomeTile](tile: T): T =
 # Tilemap Reduction
 # -----------------
 
-proc reduce*[T:SomeTile](data: seq[T]|View[T]): tuple[tiles: seq[T], map: seq[ScrEntry]] =
+proc reduce*[T:SomeTile](data: seq[T]|View[T], firstBlank=true): tuple[tiles: seq[T], map: seq[ScrEntry]] =
   ## Convert an array of tiles into a minimal tileset with duplicates removed
   ## (including horizontally/vertically flipped copies) and a map of tile indexes.
   
   var dictionary: Table[T, ScrEntry]  # mapping from tiles to their index (and flip flags)
   var tiles: seq[T]
   var map: seq[ScrEntry]
+  
+  if firstBlank:
+    # add empty tile to tileset and dictionary
+    var t: T
+    when t is Tile16:
+      for px in mitems(t):
+        px = clrEmpty
+    tiles.add(t)
+    dictionary[t] = 0.ScrEntry
   
   for t in data:
     dictionary.withValue(t, se) do:
@@ -261,7 +277,10 @@ proc getPalettesFromTiles*(tiles16: seq[Tile16]): seq[IntSet] =
 # ---------------------------------------
 
 proc loadBg16*(filename: string): Bg16 =
-  ## Load a direct color 15bpp tiled background from a PNG file
+  ## Load a direct color 15bpp tiled background from a PNG file.
+  ## 
+  ## Note: this isn't a real format that the GBA uses, but is useful as
+  ## an intermediate representation before converting to 4bpp or 8bpp.
   
   let pngRes = loadPNG32(filename)
   let pixels = pngRes.data
@@ -284,7 +303,40 @@ proc loadBg16*(filename: string): Bg16 =
   result.img = img16
   result.map = map
 
-proc toBg4*(bg16: var Bg16): Bg4 =
+
+proc toBg8*(bg16: Bg16): Bg8 =
+  ## Convert a direct color 15bpp background to a paletted 8bpp background.
+  
+  # mapping of colors to their position in the palette
+  var colorIndexes: OrderedTable[GfxColor, int]
+  
+  # first color is transparent
+  colorIndexes[clrEmpty] = 0
+  
+  # convert the tileset from 15bpp to 8bpp
+  var img8 = newSeq[Tile8](bg16.img.len)
+  for i, tile in bg16.img:
+    for j, color in tile:
+      var index = colorIndexes.getOrDefault(color, -1)
+      if index == -1:
+        index = colorIndexes.len
+        colorIndexes[color] = index
+      img8[i][j] = index.uint8
+  
+  var pal: GfxPalette
+  for color in keys(colorIndexes):
+    pal.add(color)
+  
+  doAssert(pal.len <= 256)
+  
+  result.w = bg16.w
+  result.h = bg16.h
+  result.img = img8
+  result.map = bg16.map
+  result.pal = pal
+
+
+proc toBg4*(bg16: Bg16): Bg4 =
   ## Convert a direct color 15bpp background to a paletted 4bpp background.
   
   # figure out a set of 16-color palettes, and which palette each tile in the tileset should have.
@@ -315,13 +367,111 @@ proc toBg4*(bg16: var Bg16): Bg4 =
   result.map = map
   result.pals = mergedPals
 
-proc loadBg4*(filename: string): Bg4 =
+
+proc loadBg8*(filename: string): Bg8 =
+  ## Load an 8bpp paletted tiled background from a PNG file.
+  
+  let png = readPng(filename)
+  let info = png.getInfo()
+  let pngPal = info.mode.palette
+  
+  if pngPal.len == 0:
+    # Load a direct color image then convert to 8bpp paletted.
+    return loadBg16(filename).toBg8()
+  
+  var pal: GfxPalette
+  for c in pngPal:
+    if ord(c.a) == 0:
+      pal.add clrEmpty
+    else:
+      pal.add rgb8(ord(c.r), ord(c.g), ord(c.b))
+  
+  doAssert(pal.len <= 256)
+  
+  let pixels = png.pixels
+  let numPixels = info.width * info.height
+  
+  let numTiles = numPixels div (8*8)
+  var tiles = newSeq[Tile8](numTiles)
+  let tilesAsPixels = viewSeqAs[char, Tile8](tiles) 
+  
+  for i, j in tileEncode(info.width, info.height):
+    tilesAsPixels[i] = pixels[j]
+  
+  # reduce to 8bpp tileset + map
+  var (img8, map) = reduce(tiles)
+  result.w = info.width div 8
+  result.h = info.height div 8
+  result.img = img8
+  result.map = map
+  result.pal = pal
+
+
+proc toBg4*(bg8: Bg8): Bg4 =
+  ## Strict conversion from 8bpp background to 4bpp background.
+  ## 
+  ## If the 8bpp background has more than 16 colors, then it will be treated as having
+  ## several palettes (`0..15`, `16..31`, `32..47`, ...).
+  ## 
+  ## In that case, the first color in each palette must be the same (i.e. the transparent color),
+  ## and each tile in the image is only allowed to refer to colors from a single palette.
+  
+  let transparent = bg8.pal[0]
+  var maxUsedPalette = 0  # with this we can trim any colors that weren't used?
+  var pals: seq[GfxPalette]
+  
+  for i, c in bg8.pal:
+    if i mod 16 == 0:
+      # note, could possibly relax this restriction and allow tiles that refer to color 0 instead.
+      doAssert(c == transparent, "In strict conversion from 8bpp to 4bpp, each group of 16 colors must start with the same color.")
+      pals.add(newSeqOfCap[GfxColor](cap=16))
+    pals[pals.len-1].add(c)
+  
+  var img = newSeq[Tile4](bg8.img.len)
+  var map = bg8.map
+  
+  # Convert 8bpp to 4bpp
+  for i, t4 in mpairs(img):
+    let t8 = unsafeAddr bg8.img[i]
+    let palNum = t8[0] div 16
+    let palStart = palNum * 16
+    map[i].palbank = palNum.int
+    if palNum.int > maxUsedPalette:
+      maxUsedPalette = palNum.int
+    for j, p4 in mpairs(t4):
+      let p = t8[j*2]
+      let q = t8[j*2 + 1]
+      doAssert((p div 16 == palNum) and (q div 16 == palNum))
+      p4 = (p - palStart) or ((q - palStart) shl 4)
+  
+  
+  result.w = bg8.w
+  result.h = bg8.h
+  result.img = img
+  result.map = map
+  result.pals = pals[0..maxUsedPalette]
+
+
+proc loadBg4*(filename: string, indexed=false): Bg4 =
   ## Load a 4bpp tiled background from a PNG file.
   ## 
   ## The resulting background is ideal for usage on the GBA.
+  ## 
+  ## **Parameters:**
+  ## 
+  ## filename
+  ##   Path to PNG file.
+  ## indexed
+  ##   If false the image will be loaded as true color (regardless of settings).
+  ## 
+  ##   TODO: fix this description  --->  Note: if the input PNG is indexed (e.g. 8-bit paletted PNG), this function will not preserve the order of colors.
   
-  var bg16 = loadBg16(filename)
-  result = bg16.toBg4()
+  if indexed:
+    var bg = loadBg8(filename)
+    bg.toBg4()
+  else:
+    var bg = loadBg16(filename)
+    bg.toBg4()
 
 
 
