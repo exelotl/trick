@@ -51,6 +51,8 @@ type
       ## Bitmap or tiled arrangement.
     width*: int 
       ## Image width (only needed for `binToPng`, will be set by `pngToBin`)
+    height*: int
+      ## Image height (unneeded, will be set by `pngToBin`)
     palGroup*: int
       ## An optional tag which you could use to check whether two
       ## graphics are sharing a palette

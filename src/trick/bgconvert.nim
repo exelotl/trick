@@ -462,9 +462,10 @@ proc loadBg4*(filename: string, indexed=false): Bg4 =
   ## filename
   ##   Path to PNG file.
   ## indexed
-  ##   If false the image will be loaded as true color (regardless of settings).
+  ##   If true, the palette of the input PNG will be preserved.
+  ##   Otherwise, the input PNG will be loaded as true color,
+  ##   and new palettes will be derived from it.
   ## 
-  ##   TODO: fix this description  --->  Note: if the input PNG is indexed (e.g. 8-bit paletted PNG), this function will not preserve the order of colors.
   
   if indexed:
     var bg = loadBg8(filename)
