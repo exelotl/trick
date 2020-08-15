@@ -429,13 +429,14 @@ proc toBg4*(bg8: Bg8): Bg4 =
   
   var img = newSeq[Tile4](bg8.img.len)
   var map = bg8.map
+  var tidToPal: seq[int]
   
   # Convert 8bpp to 4bpp
   for i, t4 in mpairs(img):
     let t8 = unsafeAddr bg8.img[i]
     let palNum = t8[0] div 16
     let palStart = palNum * 16
-    map[i].palbank = palNum.int
+    tidToPal.add(palNum.int)
     if palNum.int > maxUsedPalette:
       maxUsedPalette = palNum.int
     for j, p4 in mpairs(t4):
@@ -444,6 +445,8 @@ proc toBg4*(bg8: Bg8): Bg4 =
       doAssert((p div 16 == palNum) and (q div 16 == palNum))
       p4 = (p - palStart) or ((q - palStart) shl 4)
   
+  for se in mitems(map):
+    se.palbank = tidToPal[se.tid]
   
   result.w = bg8.w
   result.h = bg8.h
