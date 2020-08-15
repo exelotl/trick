@@ -276,7 +276,7 @@ proc getPalettesFromTiles*(tiles16: seq[Tile16]): seq[IntSet] =
 # High level background loading functions
 # ---------------------------------------
 
-proc loadBg16*(filename: string): Bg16 =
+proc loadBg16*(filename: string, firstBlank = true): Bg16 =
   ## Load a direct color 15bpp tiled background from a PNG file.
   ## 
   ## Note: this isn't a real format that the GBA uses, but is useful as
@@ -297,7 +297,7 @@ proc loadBg16*(filename: string): Bg16 =
       else: rgb8(pixels[k].int, pixels[k+1].int, pixels[k+2].int)
   
   # reduce to 15bpp tileset + map
-  var (img16, map) = reduce(tiles)
+  var (img16, map) = reduce(tiles, firstBlank)
   result.w = pngRes.width div 8
   result.h = pngRes.height div 8
   result.img = img16
@@ -368,7 +368,7 @@ proc toBg4*(bg16: Bg16): Bg4 =
   result.pals = mergedPals
 
 
-proc loadBg8*(filename: string): Bg8 =
+proc loadBg8*(filename: string, firstBlank = true): Bg8 =
   ## Load an 8bpp paletted tiled background from a PNG file.
   
   let png = readPng(filename)
@@ -452,7 +452,7 @@ proc toBg4*(bg8: Bg8): Bg4 =
   result.pals = pals[0..maxUsedPalette]
 
 
-proc loadBg4*(filename: string, indexed=false): Bg4 =
+proc loadBg4*(filename: string, indexed=false, firstBlank=true): Bg4 =
   ## Load a 4bpp tiled background from a PNG file.
   ## 
   ## The resulting background is ideal for usage on the GBA.
@@ -468,10 +468,10 @@ proc loadBg4*(filename: string, indexed=false): Bg4 =
   ## 
   
   if indexed:
-    var bg = loadBg8(filename)
+    var bg = loadBg8(filename, firstBlank)
     bg.toBg4()
   else:
-    var bg = loadBg16(filename)
+    var bg = loadBg16(filename, firstBlank)
     bg.toBg4()
 
 
