@@ -9,7 +9,7 @@ import nimPNG
 import streams
 
 type
-  GfxColor* = uint16
+  GfxColor* = distinct uint16
     ## 15-bit (5 bits per channel) BGR color.
     ## Each component has a value between 0 and 31.
     ##
@@ -76,46 +76,52 @@ func rgb8*(rgb: int): GfxColor =
     (((rgb and 0x00ff00) shr 11) shl 5) or
     (((rgb and 0x0000ff) shr 3) shl 10)).GfxColor
 
-proc r*(color: GfxColor): int {.noSideEffect.} =
+func r*(color: GfxColor): int =
   ## .. include:: doc/see-below.rst
   color.int and 0x001F
 
-proc `r=`*(color: var GfxColor, r: int) =
+func `r=`*(color: var GfxColor, r: int) =
   ## Red component of a 15-bit color.
-  color = (color and 0b1_11111_11111_00000) or (r.uint16 and 0x001F)
+  uint16(color) = (color.uint16 and 0b1_11111_11111_00000) or (r.uint16 and 0x001F)
 
 
-proc g*(color: GfxColor): int {.noSideEffect.} =
+func g*(color: GfxColor): int =
   ## .. include:: doc/see-below.rst
   (color.int shr 5) and 0x001F
 
-proc `g=`*(color: var GfxColor, g: int) =
+func `g=`*(color: var GfxColor, g: int) =
   ## Green component of a 15-bit color.
-  color = (color and 0b1_11111_00000_11111) or (g.uint16 and 0x001F) shl 5
+  uint16(color) = (color.uint16 and 0b1_11111_00000_11111) or (g.uint16 and 0x001F) shl 5
 
 
-proc b*(color: GfxColor): int {.noSideEffect.} =
+func b*(color: GfxColor): int =
   ## .. include:: doc/see-below.rst
   (color.int shr 10) and 0x001F
 
-proc `b=`*(color: var GfxColor, b: int) =
+func `b=`*(color: var GfxColor, b: int) =
   ## Blue component of a 15-bit color.
-  color = (color and 0b1_00000_11111_11111) or (b.uint16 and 0x001F) shl 10
+  uint16(color) = (color.uint16 and 0b1_00000_11111_11111) or (b.uint16 and 0x001F) shl 10
 
+proc `==`*(a, b: GfxColor): bool {.borrow.}
+
+proc `$`*(c: GfxColor): string =
+  result = "GfxColor(" & $c.r & "," & $c.g & "," & $c.b & ")"
+  if (c.uint16 and 0b1_00000_00000_00000) != 0:
+    result.add "**"
 
 proc readPal*(palFile: string): GfxPalette =
   ## Read a palette from a binary file.
   let palData = readFile(palFile)
   for i in 0..<(palData.len div 2):
-    result.add(palData[i*2].uint16 or (palData[i*2+1].uint16 shl 8))  # little endian?
+    result.add (palData[i*2].uint16 or (palData[i*2+1].uint16 shl 8)).GfxColor  # little endian?
 
 proc writePal*(palFile: string, pal: GfxPalette) =
   ## Write a palette to a binary file.
   let outStream = openFileStream(palFile, fmWrite)
   defer: outStream.close()
   for color in pal:
-    let b1 = (color and 0x00ff).uint8
-    let b2 = ((color and 0xff00) shr 8).uint8
+    let b1 = (color.uint16 and 0x00ff).uint8
+    let b2 = ((color.uint16 and 0xff00) shr 8).uint8
     outStream.write(b1)
     outStream.write(b2)
 
@@ -223,6 +229,14 @@ proc writeFile*(filename: string, png: PNG) =
   defer: stream.close()
   png.writeChunks(stream)
 
+
+proc readPng*(filename: string): PNG[string] =
+  ## Load a `PNG` object instead of the less-flexible `PNGResult` that nimPNG usually returns.
+  var stream = openFileStream(filename, fmRead)
+  result = decodePNG(string, stream)
+  stream.close()
+
+
 proc pngToBin*(filename: string, conf: var GfxInfo, buildPal: bool): string =
   ## Load a PNG by filename and convert to GBA/NDS image data.
   ##
@@ -232,64 +246,134 @@ proc pngToBin*(filename: string, conf: var GfxInfo, buildPal: bool): string =
   ## If `buildPal` is true, unique colors will be added to `conf.pal`.
   ## Otherwise new colors are considered an error.
   
-  let pngRes = loadPNG32(filename)
-  let pixels = pngRes.data
-  let numPixels = pngRes.width * pngRes.height
+  let png = readPng(filename)
+  let info = png.getInfo()
+  let mode = info.mode
+  let pngPal = mode.palette
+  let pixels = png.pixels
+  let numPixels = info.width * info.height
   let numBytes = numPixels div (8 div ord(conf.bpp))
   
   # update width in case the user of this procedure wants to know.
-  conf.width = pngRes.width
+  conf.width = info.width
   
   # initialise the output data
   var data = newString(numBytes)
   
-  # get the Nth 32-bit RGBA pixel in the PNG data
-  # convert to 15-bit BGR and return its index in the palette
-  template getPixel(n: int): uint8 =
+  template getPixelIndexed8Direct(n: int): uint8 =
+    let index = pixels[n].int
+    doAssert(index < pngPal.len, "Index is outside the bounds of the PNG's palette. (" & filename & ")")
+    index.uint8
+  
+  template findOrAddColor(color: GfxColor): uint8 =
+    let index = conf.pal.find(color)
+    if index == -1:
+      # extend the palette if we are allowed to
+      if buildPal:
+        conf.pal.add(color)
+        (conf.pal.len-1).uint8
+      else:
+        raiseAssert("Encountered a color (" & $color & ") which does not exist in the specified palette (" & filename & ")")
+    else:
+      index.uint8
+  
+  template getPixelIndexed8(n: int): uint8 =
+    ## Get the colour of the Nth 8-bit indexed pixel in the PNG data
+    ## Convert to 15-bit BGR and return its index in the palette
+    let i = pixels[n].int
+    doAssert(i < pngPal.len, "Index is outside the bounds of the PNG's palette. (" & filename & ")")
+    let c = pngPal[i]
+    if c.a == 0.char:
+      # fully transparent pixel always maps to index zero
+      0.uint8
+    else:
+      findOrAddColor rgb8(ord(c.r), ord(c.g), ord(c.b))
+  
+  template getPixelRGBA8(n: int): uint8 =
+    ## Get the Nth 32-bit RGBA pixel in the PNG data
+    ## Convert to 15-bit BGR and return its index in the palette
     let i = n*4
     if pixels[i+3] == 0.char:
       # fully transparent pixel always maps to index zero
       0.uint8
     else:
-      let color = rgb8(pixels[i].int, pixels[i+1].int, pixels[i+2].int)
-      var c = color.GfxColor
-      let index = conf.pal.find(color)
-      if index == -1:
-        # extend the palette if we are allowed to
-        if buildPal:
-          conf.pal.add(color)
-          (conf.pal.len-1).uint8
-        else:
-          raise newException(Exception, "While processing " & filename & ", encountered a color which does not exist in the specified palette")
-      else: index.uint8
+      findOrAddColor rgb8(pixels[i].int, pixels[i+1].int, pixels[i+2].int)
   
-  # fill the output bytes with palette entries according to bit depth
-  case conf.bpp
-  of gfx2bpp:
-    for i in 0..<numBytes:
-      data[i] = (
-        (getPixel(i*4)) or
-        (getPixel(i*4 + 1) shl 2) or
-        (getPixel(i*4 + 2) shl 4) or
-        (getPixel(i*4 + 3) shl 6)).char
-  of gfx4bpp:
-    for i in 0..<numBytes:
-      data[i] = (getPixel(i*2) or (getPixel(i*2 + 1) shl 4)).char
-  of gfx8bpp:
-    for i in 0..<numBytes:
-      data[i] = getPixel(i).char
+  template fillData(getPixel: untyped) =
+    ## Fill the output bytes with palette entries according to bit depth
+    case conf.bpp
+    of gfx2bpp:
+      for i in 0..<numBytes:
+        data[i] = (
+          (getPixel(i*4)) or
+          (getPixel(i*4 + 1) shl 2) or
+          (getPixel(i*4 + 2) shl 4) or
+          (getPixel(i*4 + 3) shl 6)).char
+    of gfx4bpp:
+      for i in 0..<numBytes:
+        data[i] = (getPixel(i*2) or (getPixel(i*2 + 1) shl 4)).char
+    of gfx8bpp:
+      for i in 0..<numBytes:
+        data[i] = getPixel(i).char
+  
+  case mode.colorType:
+  of LCT_PALETTE:
+    doAssert(pngPal.len > 0)
+    
+    # Convert PNG palette to GBA/NDS palette
+    var pal: GfxPalette
+    for c in pngPal:
+      if ord(c.a) == 0:
+        pal.add clrEmpty
+      else:
+        pal.add rgb8(ord(c.r), ord(c.g), ord(c.b))
+    
+    const strictPaletteGrowth = false  # preserve png palette exactly - could make this into an option later?
+    
+    if buildPal:
+      if strictPaletteGrowth:
+        # We can grow conf.pal, but any colors already in conf.pal
+        # must appear in the same order as in the PNG palette.
+        for i in 0 ..< min(conf.pal.len, pal.len):
+          doAssert(
+            conf.pal[i] == pal[i],
+            "Mismatch between GfxInfo palette (" & $conf.pal[i] &
+              ") and PNG palette (" & $pal[i] &
+              ") at index " & $i & " (" & filename & ")")
+        for i in conf.pal.len ..< pal.len:
+          conf.pal.add(pal[i])
+      else:
+        # Loop over PNG pal and only add colors if they don't already exist in conf.pal
+        # This then requires remapping to be done either during or after `fillData()`
+        for color in pal:
+          if color notin conf.pal:
+            conf.pal.add(color)
+    else:
+      doAssert(conf.pal == pal)
+    
+    case mode.bitDepth
+    of 8:
+      if strictPaletteGrowth:
+        fillData(getPixelIndexed8Direct)
+      else:
+        fillData(getPixelIndexed8)
+    else:
+      raiseAssert("Unsupported bit depth " & $mode.bitDepth & " for paletted color mode (" & filename & ")")
+  
+  of LCT_RGBA:
+    case mode.bitDepth
+    of 8:
+      fillData(getPixelRGBA8)
+    else:
+      raiseAssert("Unsupported bit depth " & $mode.bitDepth & " for RGBA color mode (" & filename & ")")
+  else:
+    raiseAssert("Unsupported color type " & $mode.colorType & " (" & filename & ")")
   
   case conf.layout
   of gfxTiles:
     result = newString(numBytes)
-    for i, j in tileEncode(pngRes.width, pngRes.height, conf.bpp):
+    for i, j in tileEncode(info.width, info.height, conf.bpp):
       result[i] = data[j]
   of gfxBitmap:
     result = data
-  
 
-proc readPng*(filename: string): PNG[string] =
-  ## Load a `PNG` object instead of the less-flexible `PNGResult` that nimPNG usually returns.
-  var stream = openFileStream(filename, fmRead)
-  result = decodePNG(string, stream)
-  stream.close()
