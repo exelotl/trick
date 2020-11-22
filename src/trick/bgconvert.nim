@@ -413,17 +413,13 @@ proc toBg4*(bg8: Bg8): Bg4 =
   ## If the 8bpp background has more than 16 colors, then it will be treated as having
   ## several palettes (`0..15`, `16..31`, `32..47`, ...).
   ## 
-  ## In that case, the first color in each palette must be the same (i.e. the transparent color),
-  ## and each tile in the image is only allowed to refer to colors from a single palette.
+  ## Each tile in the image is only allowed to refer to colors from a single one of those palettes.
   
-  let transparent = bg8.pal[0]
   var maxUsedPalette = 0  # with this we can trim any colors that weren't used?
   var pals: seq[GfxPalette]
   
   for i, c in bg8.pal:
     if i mod 16 == 0:
-      # note, could possibly relax this restriction and allow tiles that refer to color 0 instead.
-      # doAssert(c == transparent, "In strict conversion from 8bpp to 4bpp, each group of 16 colors must start with the same color.")
       pals.add(newSeqOfCap[GfxColor](cap=16))
     pals[pals.len-1].add(c)
   
@@ -431,10 +427,15 @@ proc toBg4*(bg8: Bg8): Bg4 =
   var map = bg8.map
   var tidToPal: seq[int]
   
+  proc firstNonTransparentIndex(t8: var Tile8): uint8 =
+    for p in t8:
+      if p mod 16 != 0:
+        return p
+  
   # Convert 8bpp to 4bpp
   for i, t4 in mpairs(img):
     let t8 = unsafeAddr bg8.img[i]
-    let palNum = t8[0] div 16
+    let palNum = firstNonTransparentIndex(t8[]) div 16
     let palStart = palNum * 16
     tidToPal.add(palNum.int)
     if palNum.int > maxUsedPalette:
