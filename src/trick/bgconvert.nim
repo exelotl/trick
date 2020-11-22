@@ -423,7 +423,7 @@ proc toBg4*(bg8: Bg8): Bg4 =
   for i, c in bg8.pal:
     if i mod 16 == 0:
       # note, could possibly relax this restriction and allow tiles that refer to color 0 instead.
-      doAssert(c == transparent, "In strict conversion from 8bpp to 4bpp, each group of 16 colors must start with the same color.")
+      # doAssert(c == transparent, "In strict conversion from 8bpp to 4bpp, each group of 16 colors must start with the same color.")
       pals.add(newSeqOfCap[GfxColor](cap=16))
     pals[pals.len-1].add(c)
   
@@ -440,10 +440,17 @@ proc toBg4*(bg8: Bg8): Bg4 =
     if palNum.int > maxUsedPalette:
       maxUsedPalette = palNum.int
     for j, p4 in mpairs(t4):
-      let p = t8[j*2]
-      let q = t8[j*2 + 1]
-      doAssert((p div 16 == palNum) and (q div 16 == palNum))
-      p4 = (p - palStart) or ((q - palStart) shl 4)
+      var p = t8[j*2]
+      var q = t8[j*2 + 1]
+      if p mod 16 == 0: p = palStart
+      if q mod 16 == 0: q = palStart
+      doAssert(
+        (p div 16 == palNum) and (q div 16 == palNum),
+        block:
+          let badPixel = if (p div 16) != palNum: p else: q
+          fmt"Found pixel with value {badPixel} which is outside the designated palette range ({palStart}..{palStart+15}) for tile number {i}."
+      )
+      p4 = (p - palStart.uint8) or ((q - palStart.uint8) shl 4)
   
   for se in mitems(map):
     se.palbank = tidToPal[se.tid]
