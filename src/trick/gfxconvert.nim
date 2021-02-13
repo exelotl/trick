@@ -61,44 +61,47 @@ const clrEmpty* = (1 shl 15).GfxColor
   ## A color which is different to all other colors due to the unused bit.
   ## It's recommended to use this as the first item in any palette.
 
-func rgb15*(r, g, b: int): GfxColor =
-  ## Create a 15-bit BGR color.
+func rgb15*(r, g, b: int): GfxColor {.deprecated:"Use rgb5 instead".} {.inline.} =
+  (r or (g shl 5) or (b shl 10)).GfxColor
+
+func rgb5*(r, g, b: int): GfxColor {.inline.} =
+  ## Create a 15-bit BGR color from 5-bit components
   ## Each component should be from 0 to 31.
   (r or (g shl 5) or (b shl 10)).GfxColor
 
-func rgb8*(r, g, b: int): GfxColor =
+func rgb8*(r, g, b: int): GfxColor {.inline.} =
   ## Create a 15-bit BGR color, using 8-bit components
   ((r shr 3) or ((g shr 3) shl 5) or ((b shr 3) shl 10)).GfxColor
 
-func rgb8*(rgb: int): GfxColor =
+func rgb8*(rgb: int): GfxColor {.inline.} =
   ## Create a 15-bit BGR color from a 24-bit RGB color of the form 0xRRGGBB
   (((rgb and 0xff0000) shr 19) or
     (((rgb and 0x00ff00) shr 11) shl 5) or
     (((rgb and 0x0000ff) shr 3) shl 10)).GfxColor
 
-func r*(color: GfxColor): int =
+func r*(color: GfxColor): int {.inline.} =
   ## .. include:: doc/see-below.rst
   color.int and 0x001F
 
-func `r=`*(color: var GfxColor, r: int) =
+func `r=`*(color: var GfxColor, r: int) {.inline.} =
   ## Red component of a 15-bit color.
   uint16(color) = (color.uint16 and 0b1_11111_11111_00000) or (r.uint16 and 0x001F)
 
 
-func g*(color: GfxColor): int =
+func g*(color: GfxColor): int {.inline.} =
   ## .. include:: doc/see-below.rst
   (color.int shr 5) and 0x001F
 
-func `g=`*(color: var GfxColor, g: int) =
+func `g=`*(color: var GfxColor, g: int) {.inline.} =
   ## Green component of a 15-bit color.
   uint16(color) = (color.uint16 and 0b1_11111_00000_11111) or (g.uint16 and 0x001F) shl 5
 
 
-func b*(color: GfxColor): int =
+func b*(color: GfxColor): int {.inline.} =
   ## .. include:: doc/see-below.rst
   (color.int shr 10) and 0x001F
 
-func `b=`*(color: var GfxColor, b: int) =
+func `b=`*(color: var GfxColor, b: int) {.inline.} =
   ## Blue component of a 15-bit color.
   uint16(color) = (color.uint16 and 0b1_00000_11111_11111) or (b.uint16 and 0x001F) shl 10
 
@@ -125,7 +128,7 @@ proc writePal*(palFile: string, pal: GfxPalette) =
     outStream.write(b1)
     outStream.write(b2)
 
-func swap4bpp*(ab: uint8): uint8 =
+func swap4bpp*(ab: uint8): uint8 {.inline.} =
   ## Swap the low and high nybbles within a byte. e.g.
   ##
   ## ```nim
@@ -139,7 +142,7 @@ func swap4bpp*(ab: uint8): uint8 =
   let b = ab and 0x0f
   (b shl 4) or (a shr 4)
 
-func swap2bpp*(abcd: uint8): uint8 =
+func swap2bpp*(abcd: uint8): uint8 {.inline.} =
   ## Swap all pairs of bits within a byte. e.g. 
   ##
   ## ```nim

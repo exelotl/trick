@@ -89,7 +89,7 @@ Name                                                               Parameters   
 `pngToBin<trick/gfxconvert.html#pngToBin,string,GfxInfo,bool>`_    *filename*, *conf*, *buildPal*    string           Load a PNG and convert to GBA/NDS image data
 `readPal<trick/gfxconvert.html#readPal,string>`_                   *filename*                        GfxPalette       Read a palette from a binary file
 `writePal<trick/gfxconvert.html#writePal,string,GfxPalette>`_      *filename*, *pal*                                  Write a palette to a binary file
-`rgb15<trick/gfxconvert.html#rgb15,int,int,int>`_                  *r*, *g*, *b*                     GfxColor         Create a color using 5-bit components
+`rgb5<trick/gfxconvert.html#rgb5,int,int,int>`_                    *r*, *g*, *b*                     GfxColor         Create a color using 5-bit components
 `rgb8<trick/gfxconvert.html#rgb8,int,int,int>`_                    *r*, *g*, *b*                     GfxColor         Create a color using 8-bit components
 `rgb8<trick/gfxconvert.html#rgb8,int>`_                            *hex*                             GfxColor         Create a color using an 0xRRGGBB value
 `swap4bpp<trick/gfxconvert.html#swap4bpp,uint8>`_                  *ab*                              *ba*             Swap the low and high nybbles within a byte
