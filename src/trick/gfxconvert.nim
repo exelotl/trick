@@ -61,7 +61,7 @@ const clrEmpty* = (1 shl 15).GfxColor
   ## A color which is different to all other colors due to the unused bit.
   ## It's recommended to use this as the first item in any palette.
 
-func rgb15*(r, g, b: int): GfxColor {.deprecated:"Use rgb5 instead".} {.inline.} =
+func rgb15*(r, g, b: int): GfxColor {.deprecated:"Use rgb5 instead", inline.} =
   (r or (g shl 5) or (b shl 10)).GfxColor
 
 func rgb5*(r, g, b: int): GfxColor {.inline.} =
