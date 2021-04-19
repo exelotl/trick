@@ -20,7 +20,7 @@
 <title>trick/mmutil</title>
 <link rel="stylesheet" type="text/css" href="../nimdoc.out.css">
 
-<script type="text/javascript" src="dochack.js"></script>
+<script type="text/javascript" src="../dochack.js"></script>
 
 <script type="text/javascript">
 function main() {
@@ -47,21 +47,12 @@ function main() {
 
   toggleSwitch.addEventListener('change', switchTheme, false);
 
+  const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
+  if (currentTheme) {
+    document.documentElement.setAttribute('data-theme', currentTheme);
 
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    document.documentElement.setAttribute('data-theme', "dark");
-    toggleSwitch.checked = true;
-  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-    document.documentElement.setAttribute('data-theme', "light");
-    toggleSwitch.checked = false;
-  } else {
-    const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
-    if (currentTheme) {
-      document.documentElement.setAttribute('data-theme', currentTheme);
-
-      if (currentTheme === 'dark') {
-        toggleSwitch.checked = true;
-      }
+    if (currentTheme === 'dark') {
+      toggleSwitch.checked = true;
     }
   }
 }
@@ -83,6 +74,9 @@ function main() {
   </div>
   <div id="global-links">
     <ul class="simple">
+    <li>
+      <a href="../theindex.html">Index</a>
+    </li>
     </ul>
   </div>
   <div id="searchInputDiv">
@@ -107,16 +101,19 @@ function main() {
   <a class="reference reference-toplevel" href="#8" id="58">Vars</a>
   <ul class="simple simple-toc-section">
       <li><a class="reference" href="#mmutilPath"
-    title="mmutilPath: string"><wbr />mmutil<wbr />Path<span class="attachedType"></span></a></li>
+    title="mmutilPath: string">mmutilPath</a></li>
 
   </ul>
 </li>
 <li>
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
+      <ul class="simple nested-toc-section">makeSoundbank
       <li><a class="reference" href="#makeSoundbank%2Cstring%2Cstring%2C"
     title="makeSoundbank(nimOutputPath, cOutputPath: string;
-              inputFiles: string | openArray[string]; nds = false)"><wbr />make<wbr />Soundbank<span class="attachedType"></span></a></li>
+              inputFiles: string | openArray[string]; nds = false)">makeSoundbank,<wbr>string,<wbr>string,<wbr></a></li>
+
+  </ul>
 
   </ul>
 </li>
@@ -161,7 +158,7 @@ h4 {
 <dl class="item">
 <a id="makeSoundbank,string,string,"></a>
 <dt><pre><span class="Keyword">proc</span> <a href="#makeSoundbank%2Cstring%2Cstring%2C"><span class="Identifier">makeSoundbank</span></a><span class="Other">(</span><span class="Identifier">nimOutputPath</span><span class="Other">,</span> <span class="Identifier">cOutputPath</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span>
-                  <span class="Identifier">inputFiles</span><span class="Other">:</span> <span class="Identifier">string</span> <span class="Operator">|</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">nds</span> <span class="Other">=</span> <span class="Identifier">false</span><span class="Other">)</span></pre></dt>
+                   <span class="Identifier">inputFiles</span><span class="Other">:</span> <span class="Identifier">string</span> <span class="Operator">|</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">nds</span> <span class="Other">=</span> <span class="Identifier">false</span><span class="Other">)</span></pre></dt>
 <dd>
 
 <p>Invoke the Maxmod utility program (mmutil), to convert music and sound effects into a soundbank. The output produced by mmutil is then converted into C and Nim code which can be used in your game.</p>
@@ -206,7 +203,7 @@ h4 {
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2020-05-28 21:57:50 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2021-04-19 00:27:36 UTC</small>
       </div>
     </div>
   </div>

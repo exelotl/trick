@@ -20,7 +20,7 @@
 <title>trick/common</title>
 <link rel="stylesheet" type="text/css" href="../nimdoc.out.css">
 
-<script type="text/javascript" src="dochack.js"></script>
+<script type="text/javascript" src="../dochack.js"></script>
 
 <script type="text/javascript">
 function main() {
@@ -47,21 +47,12 @@ function main() {
 
   toggleSwitch.addEventListener('change', switchTheme, false);
 
+  const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
+  if (currentTheme) {
+    document.documentElement.setAttribute('data-theme', currentTheme);
 
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    document.documentElement.setAttribute('data-theme', "dark");
-    toggleSwitch.checked = true;
-  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-    document.documentElement.setAttribute('data-theme', "light");
-    toggleSwitch.checked = false;
-  } else {
-    const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
-    if (currentTheme) {
-      document.documentElement.setAttribute('data-theme', currentTheme);
-
-      if (currentTheme === 'dark') {
-        toggleSwitch.checked = true;
-      }
+    if (currentTheme === 'dark') {
+      toggleSwitch.checked = true;
     }
   }
 }
@@ -83,6 +74,9 @@ function main() {
   </div>
   <div id="global-links">
     <ul class="simple">
+    <li>
+      <a href="../theindex.html">Index</a>
+    </li>
     </ul>
   </div>
   <div id="searchInputDiv">
@@ -103,41 +97,71 @@ function main() {
       <li><a class="reference" href="#View"
     title="View[T] = object
   len: int
-  data: ptr UncheckedArray[T]"><wbr />View<span class="attachedType"></span></a></li>
+  data: ptr UncheckedArray[T]">View</a></li>
 
   </ul>
 </li>
 <li>
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#%5B%5D%2CView%5BT%5D%2Cint"
-    title="`[]`[T](a: View[T]; i: int): var T"><wbr />`[]`<span class="attachedType">View</span></a></li>
-  <li><a class="reference" href="#%5B%5D%3D%2CView%5BT%5D%2Cint%2CT"
-    title="`[]=`[T](a: View[T]; i: int; val: T)"><wbr />`[]=`<span class="attachedType">View</span></a></li>
-  <li><a class="reference" href="#viewSeq%2Cseq%5BT%5D"
-    title="viewSeq[T](s: var seq[T]): View[T]"><wbr />view<wbr />Seq<span class="attachedType">View</span></a></li>
-  <li><a class="reference" href="#viewSeqAs%2Cseq%5BB%5D"
-    title="viewSeqAs[A, B](s: var seq[B]): View[A]"><wbr />view<wbr />Seq<wbr />As<span class="attachedType">View</span></a></li>
-  <li><a class="reference" href="#viewBytesAs%2Cstring"
-    title="viewBytesAs[T](data: var string): View[T]"><wbr />view<wbr />Bytes<wbr />As<span class="attachedType">View</span></a></li>
-  <li><a class="reference" href="#toSeq%2CView%5BT%5D"
-    title="toSeq[T](a: View[T]): seq[T]"><wbr />to<wbr />Seq<span class="attachedType">View</span></a></li>
-  <li><a class="reference" href="#toBytes%2CView%5BT%5D"
-    title="toBytes[T](a: View[T]): string"><wbr />to<wbr />Bytes<span class="attachedType">View</span></a></li>
+      <ul class="simple nested-toc-section">makeCString
+      <li><a class="reference" href="#makeCString%2Cstring"
+    title="makeCString(data: string): Rope">makeCString,<wbr>string</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">viewBytesAs
+      <li><a class="reference" href="#viewBytesAs%2Cstring"
+    title="viewBytesAs[T](data: var string): View[T]">viewBytesAs,<wbr>string</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">[]=
+      <li><a class="reference" href="#%5B%5D%3D%2CView%5BT%5D%2Cint%2CT"
+    title="`[]=`[T](a: View[T]; i: int; val: T)">[]=,<wbr>View[T],<wbr>int,<wbr>T</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">toBytes
+      <li><a class="reference" href="#toBytes%2CView%5BT%5D"
+    title="toBytes[T](a: View[T]): string">toBytes,<wbr>View[T]</a></li>
   <li><a class="reference" href="#toBytes%2Cseq%5BT%5D"
-    title="toBytes[T](s: seq[T]): string"><wbr />to<wbr />Bytes<span class="attachedType"></span></a></li>
-  <li><a class="reference" href="#makeCString%2Cstring"
-    title="makeCString(data: string): Rope"><wbr />make<wbr />CString<span class="attachedType"></span></a></li>
-  <li><a class="reference" href="#fileToVarName%2Cstring"
-    title="fileToVarName(name: string; firstUpper = false): string"><wbr />file<wbr />To<wbr />Var<wbr />Name<span class="attachedType"></span></a></li>
+    title="toBytes[T](s: seq[T]): string">toBytes,<wbr>seq[T]</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">fileToVarName
+      <li><a class="reference" href="#fileToVarName%2Cstring"
+    title="fileToVarName(name: string; firstUpper = false): string">fileToVarName,<wbr>string</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">viewSeq
+      <li><a class="reference" href="#viewSeq%2Cseq%5BT%5D"
+    title="viewSeq[T](s: var seq[T]): View[T]">viewSeq,<wbr>seq[T]</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">viewSeqAs
+      <li><a class="reference" href="#viewSeqAs%2Cseq%5BB%5D"
+    title="viewSeqAs[A, B](s: var seq[B]): View[A]">viewSeqAs,<wbr>seq[B]</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">toSeq
+      <li><a class="reference" href="#toSeq%2CView%5BT%5D"
+    title="toSeq[T](a: View[T]): seq[T]">toSeq,<wbr>View[T]</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">[]
+      <li><a class="reference" href="#%5B%5D%2CView%5BT%5D%2Cint"
+    title="`[]`[T](a: View[T]; i: int): var T">[],<wbr>View[T],<wbr>int</a></li>
+
+  </ul>
 
   </ul>
 </li>
 <li>
   <a class="reference reference-toplevel" href="#13" id="63">Funcs</a>
   <ul class="simple simple-toc-section">
+      <ul class="simple nested-toc-section">toCamelCase
       <li><a class="reference" href="#toCamelCase%2Cstring"
-    title="toCamelCase(str: string; firstUpper = false): string"><wbr />to<wbr />Camel<wbr />Case<span class="attachedType"></span></a></li>
+    title="toCamelCase(str: string; firstUpper = false): string">toCamelCase,<wbr>string</a></li>
+
+  </ul>
 
   </ul>
 </li>
@@ -145,7 +169,7 @@ function main() {
   <a class="reference reference-toplevel" href="#15" id="65">Iterators</a>
   <ul class="simple simple-toc-section">
       <li><a class="reference" href="#items.i%2CView%5BT%5D"
-    title="items[T](a: View[T]): T"><wbr />items<span class="attachedType">View</span></a></li>
+    title="items[T](a: View[T]): T">items</a></li>
 
   </ul>
 </li>
@@ -253,7 +277,8 @@ Convert a sequence to a string of bytes.
 
 </dd>
 <a id="fileToVarName,string"></a>
-<dt><pre><span class="Keyword">proc</span> <a href="#fileToVarName%2Cstring"><span class="Identifier">fileToVarName</span></a><span class="Other">(</span><span class="Identifier">name</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">firstUpper</span> <span class="Other">=</span> <span class="Identifier">false</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#fileToVarName%2Cstring"><span class="Identifier">fileToVarName</span></a><span class="Other">(</span><span class="Identifier">name</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">firstUpper</span> <span class="Other">=</span> <span class="Identifier">false</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
 
@@ -302,7 +327,7 @@ Iterate over the content of a View.
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2020-05-28 21:57:49 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2021-04-19 00:27:36 UTC</small>
       </div>
     </div>
   </div>

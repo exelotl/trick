@@ -20,7 +20,7 @@
 <title>trick/palbuilder</title>
 <link rel="stylesheet" type="text/css" href="../nimdoc.out.css">
 
-<script type="text/javascript" src="dochack.js"></script>
+<script type="text/javascript" src="../dochack.js"></script>
 
 <script type="text/javascript">
 function main() {
@@ -47,21 +47,12 @@ function main() {
 
   toggleSwitch.addEventListener('change', switchTheme, false);
 
+  const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
+  if (currentTheme) {
+    document.documentElement.setAttribute('data-theme', currentTheme);
 
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    document.documentElement.setAttribute('data-theme', "dark");
-    toggleSwitch.checked = true;
-  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-    document.documentElement.setAttribute('data-theme', "light");
-    toggleSwitch.checked = false;
-  } else {
-    const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
-    if (currentTheme) {
-      document.documentElement.setAttribute('data-theme', currentTheme);
-
-      if (currentTheme === 'dark') {
-        toggleSwitch.checked = true;
-      }
+    if (currentTheme === 'dark') {
+      toggleSwitch.checked = true;
     }
   }
 }
@@ -83,6 +74,9 @@ function main() {
   </div>
   <div id="global-links">
     <ul class="simple">
+    <li>
+      <a href="../theindex.html">Index</a>
+    </li>
     </ul>
   </div>
   <div id="searchInputDiv">
@@ -106,15 +100,27 @@ function main() {
 <li>
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
+      <ul class="simple nested-toc-section">joinPalettes
+      <li><a class="reference" href="#joinPalettes%2Cseq%5BGfxPalette%5D"
+    title="joinPalettes(mergedPals: seq[GfxPalette]): GfxPalette">joinPalettes,<wbr>seq[GfxPalette]</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">toPalette
       <li><a class="reference" href="#toPalette%2CIntSet"
-    title="toPalette(palSet: IntSet): GfxPalette"><wbr />to<wbr />Palette<span class="attachedType"></span></a></li>
-  <li><a class="reference" href="#toIntSet%2CGfxPalette"
-    title="toIntSet(pal: GfxPalette): IntSet"><wbr />to<wbr />Int<wbr />Set<span class="attachedType"></span></a></li>
-  <li><a class="reference" href="#reducePalettes%2Cseq%5BIntSet%5D"
+    title="toPalette(palSet: IntSet): GfxPalette">toPalette,<wbr>IntSet</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">toIntSet
+      <li><a class="reference" href="#toIntSet%2CGfxPalette"
+    title="toIntSet(pal: GfxPalette): IntSet">toIntSet,<wbr>GfxPalette</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">reducePalettes
+      <li><a class="reference" href="#reducePalettes%2Cseq%5BIntSet%5D"
     title="reducePalettes(tilePals: seq[IntSet]): tuple[mergedPals: seq[GfxPalette],
-    palNums: seq[int]]"><wbr />reduce<wbr />Palettes<span class="attachedType"></span></a></li>
-  <li><a class="reference" href="#joinPalettes%2Cseq%5BGfxPalette%5D"
-    title="joinPalettes(mergedPals: seq[GfxPalette]): GfxPalette"><wbr />join<wbr />Palettes<span class="attachedType"></span></a></li>
+    palNums: seq[int]]">reducePalettes,<wbr>seq[IntSet]</a></li>
+
+  </ul>
 
   </ul>
 </li>
@@ -166,7 +172,8 @@ Given a list of individual palettes for each tile in the map Merge these down in
 
 </dd>
 <a id="joinPalettes,seq[GfxPalette]"></a>
-<dt><pre><span class="Keyword">proc</span> <a href="#joinPalettes%2Cseq%5BGfxPalette%5D"><span class="Identifier">joinPalettes</span></a><span class="Other">(</span><span class="Identifier">mergedPals</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="gfxconvert.html#GfxPalette"><span class="Identifier">GfxPalette</span></a><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="gfxconvert.html#GfxPalette"><span class="Identifier">GfxPalette</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#joinPalettes%2Cseq%5BGfxPalette%5D"><span class="Identifier">joinPalettes</span></a><span class="Other">(</span><span class="Identifier">mergedPals</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="gfxconvert.html#GfxPalette"><span class="Identifier">GfxPalette</span></a><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="gfxconvert.html#GfxPalette"><span class="Identifier">GfxPalette</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
 <p>Build a master palette bank from a set of 16-color palettes.</p>
@@ -184,7 +191,7 @@ Given a list of individual palettes for each tile in the map Merge these down in
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2020-05-28 21:57:50 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2021-04-19 00:27:36 UTC</small>
       </div>
     </div>
   </div>

@@ -20,7 +20,7 @@
 <title>trick/bgconvert</title>
 <link rel="stylesheet" type="text/css" href="../nimdoc.out.css">
 
-<script type="text/javascript" src="dochack.js"></script>
+<script type="text/javascript" src="../dochack.js"></script>
 
 <script type="text/javascript">
 function main() {
@@ -47,21 +47,12 @@ function main() {
 
   toggleSwitch.addEventListener('change', switchTheme, false);
 
+  const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
+  if (currentTheme) {
+    document.documentElement.setAttribute('data-theme', currentTheme);
 
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    document.documentElement.setAttribute('data-theme', "dark");
-    toggleSwitch.checked = true;
-  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-    document.documentElement.setAttribute('data-theme', "light");
-    toggleSwitch.checked = false;
-  } else {
-    const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
-    if (currentTheme) {
-      document.documentElement.setAttribute('data-theme', currentTheme);
-
-      if (currentTheme === 'dark') {
-        toggleSwitch.checked = true;
-      }
+    if (currentTheme === 'dark') {
+      toggleSwitch.checked = true;
     }
   }
 }
@@ -83,6 +74,9 @@ function main() {
   </div>
   <div id="global-links">
     <ul class="simple">
+    <li>
+      <a href="../theindex.html">Index</a>
+    </li>
     </ul>
   </div>
   <div id="searchInputDiv">
@@ -107,54 +101,103 @@ function main() {
   <a class="reference reference-toplevel" href="#7" id="57">Types</a>
   <ul class="simple simple-toc-section">
       <li><a class="reference" href="#SomeTile"
-    title="SomeTile = Tile4 | Tile8 | Tile16"><wbr />Some<wbr />Tile<span class="attachedType"></span></a></li>
+    title="SomeTile = Tile4 | Tile8 | Tile16">SomeTile</a></li>
   <li><a class="reference" href="#Tile4"
-    title="Tile4 = array[32, uint8]"><wbr />Tile4<span class="attachedType"></span></a></li>
+    title="Tile4 = array[32, uint8]">Tile4</a></li>
   <li><a class="reference" href="#Tile8"
-    title="Tile8 = array[64, uint8]"><wbr />Tile8<span class="attachedType"></span></a></li>
+    title="Tile8 = array[64, uint8]">Tile8</a></li>
   <li><a class="reference" href="#Tile16"
-    title="Tile16 = array[64, GfxColor]"><wbr />Tile16<span class="attachedType"></span></a></li>
+    title="Tile16 = array[64, GfxColor]">Tile16</a></li>
   <li><a class="reference" href="#ScrEntry"
-    title="ScrEntry = distinct uint16"><wbr />Scr<wbr />Entry<span class="attachedType"></span></a></li>
+    title="ScrEntry = distinct uint16">ScrEntry</a></li>
   <li><a class="reference" href="#Screenblock"
-    title="Screenblock = array[1024, ScrEntry]"><wbr />Screenblock<span class="attachedType"></span></a></li>
+    title="Screenblock = array[1024, ScrEntry]">Screenblock</a></li>
   <li><a class="reference" href="#Bg16"
     title="Bg16 = object
   w*, h*: int
   img*: seq[Tile16]
-  map*: seq[ScrEntry]"><wbr />Bg16<span class="attachedType"></span></a></li>
+  map*: seq[ScrEntry]">Bg16</a></li>
+  <li><a class="reference" href="#Bg8"
+    title="Bg8 = object
+  w*, h*: int                ## Dimensions in tiles
+  img*: seq[Tile8]           ## Tile/char image data
+  map*: seq[ScrEntry]        ## Map entries
+  pal*: GfxPalette           ## Palette with up to 256 colors">Bg8</a></li>
   <li><a class="reference" href="#Bg4"
     title="Bg4 = object
-  w*, h*: int                   ## Dimensions in tiles
-  img*: seq[Tile4]             ## Tile/char image data
-  map*: seq[ScrEntry]          ## Map entries
-  pals*: seq[GfxPalette]       ## List of palettes"><wbr />Bg4<span class="attachedType"></span></a></li>
+  w*, h*: int                ## Dimensions in tiles
+  img*: seq[Tile4]           ## Tile/char image data
+  map*: seq[ScrEntry]        ## Map entries
+  pals*: seq[GfxPalette]     ## List of palettes">Bg4</a></li>
 
   </ul>
 </li>
 <li>
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
+      <ul class="simple nested-toc-section">loadBg4
+      <li><a class="reference" href="#loadBg4%2Cstring"
+    title="loadBg4(filename: string; indexed = false; firstBlank = true): Bg4">loadBg4,<wbr>string</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">toBg4
+      <li><a class="reference" href="#toBg4%2CBg16"
+    title="toBg4(bg16: Bg16): Bg4">toBg4,<wbr>Bg16</a></li>
+  <li><a class="reference" href="#toBg4%2CBg8"
+    title="toBg4(bg8: Bg8): Bg4">toBg4,<wbr>Bg8</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">reduce
+      <li><a class="reference" href="#reduce"
+    title="reduce[T: SomeTile](data: seq[T] | View[T]; firstBlank = true): tuple[
+    tiles: seq[T], map: seq[ScrEntry]]">reduce</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">loadBg8
+      <li><a class="reference" href="#loadBg8%2Cstring"
+    title="loadBg8(filename: string; firstBlank = true): Bg8">loadBg8,<wbr>string</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">loadBg16
+      <li><a class="reference" href="#loadBg16%2Cstring"
+    title="loadBg16(filename: string; firstBlank = true): Bg16">loadBg16,<wbr>string</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">flipY
+      <li><a class="reference" href="#flipY%2CT"
+    title="flipY[T: SomeTile](tile: T): T">flipY,<wbr>T</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">toScreenBlocks
+      <li><a class="reference" href="#toScreenBlocks%2Cseq%5BScrEntry%5D%2Cint"
+    title="toScreenBlocks(map: seq[ScrEntry]; w: int): seq[Screenblock]">toScreenBlocks,<wbr>seq[ScrEntry],<wbr>int</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">getPalettesFromTiles
+      <li><a class="reference" href="#getPalettesFromTiles%2Cseq%5BTile16%5D"
+    title="getPalettesFromTiles(tiles16: seq[Tile16]): seq[IntSet]">getPalettesFromTiles,<wbr>seq[Tile16]</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">clear
+      <li><a class="reference" href="#clear%2CSomeTile"
+    title="clear(tile: var SomeTile)">clear,<wbr>SomeTile</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">toBg8
+      <li><a class="reference" href="#toBg8%2CBg16"
+    title="toBg8(bg16: Bg16): Bg8">toBg8,<wbr>Bg16</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">hash
       <li><a class="reference" href="#hash%2Cref.SomeTile"
-    title="hash(tile: ref SomeTile): Hash"><wbr />hash<span class="attachedType">SomeTile</span></a></li>
-  <li><a class="reference" href="#flipX%2CT"
-    title="flipX[T: SomeTile](tile: T): T"><wbr />flip<wbr />X<span class="attachedType"></span></a></li>
-  <li><a class="reference" href="#flipY%2CT"
-    title="flipY[T: SomeTile](tile: T): T"><wbr />flip<wbr />Y<span class="attachedType"></span></a></li>
-  <li><a class="reference" href="#reduce"
-    title="reduce[T: SomeTile](data: seq[T] | View[T]): tuple[tiles: seq[T], map: seq[ScrEntry]]"><wbr />reduce<span class="attachedType">ScrEntry</span></a></li>
-  <li><a class="reference" href="#toScreenBlocks%2Cseq%5BScrEntry%5D%2Cint"
-    title="toScreenBlocks(map: seq[ScrEntry]; w: int): seq[Screenblock]"><wbr />to<wbr />Screen<wbr />Blocks<span class="attachedType">ScrEntry</span></a></li>
-  <li><a class="reference" href="#clear%2CSomeTile"
-    title="clear(tile: var SomeTile)"><wbr />clear<span class="attachedType">SomeTile</span></a></li>
-  <li><a class="reference" href="#getPalettesFromTiles%2Cseq%5BTile16%5D"
-    title="getPalettesFromTiles(tiles16: seq[Tile16]): seq[IntSet]"><wbr />get<wbr />Palettes<wbr />From<wbr />Tiles<span class="attachedType">Tile16</span></a></li>
-  <li><a class="reference" href="#loadBg16%2Cstring"
-    title="loadBg16(filename: string): Bg16"><wbr />load<wbr />Bg16<span class="attachedType">Bg16</span></a></li>
-  <li><a class="reference" href="#toBg4%2CBg16"
-    title="toBg4(bg16: var Bg16): Bg4"><wbr />to<wbr />Bg4<span class="attachedType">Bg16</span></a></li>
-  <li><a class="reference" href="#loadBg4%2Cstring"
-    title="loadBg4(filename: string): Bg4"><wbr />load<wbr />Bg4<span class="attachedType">Bg4</span></a></li>
+    title="hash(tile: ref SomeTile): Hash">hash,<wbr>ref.SomeTile</a></li>
+
+  </ul>
+  <ul class="simple nested-toc-section">flipX
+      <li><a class="reference" href="#flipX%2CT"
+    title="flipX[T: SomeTile](tile: T): T">flipX,<wbr>T</a></li>
+
+  </ul>
 
   </ul>
 </li>
@@ -162,21 +205,21 @@ function main() {
   <a class="reference reference-toplevel" href="#18" id="68">Templates</a>
   <ul class="simple simple-toc-section">
       <li><a class="reference" href="#tid.t%2CScrEntry"
-    title="tid(se: ScrEntry): int"><wbr />tid<span class="attachedType">ScrEntry</span></a></li>
+    title="tid(se: ScrEntry): int">tid</a></li>
   <li><a class="reference" href="#tid%3D.t%2CScrEntry%2Cint"
-    title="tid=(se: var ScrEntry; val: int)"><wbr />tid=<span class="attachedType">ScrEntry</span></a></li>
+    title="tid=(se: var ScrEntry; val: int)">tid=</a></li>
   <li><a class="reference" href="#hflip.t%2CScrEntry"
-    title="hflip(se: ScrEntry): bool"><wbr />hflip<span class="attachedType">ScrEntry</span></a></li>
+    title="hflip(se: ScrEntry): bool">hflip</a></li>
   <li><a class="reference" href="#hflip%3D.t%2CScrEntry%2Cbool"
-    title="hflip=(se: var ScrEntry; val: bool)"><wbr />hflip=<span class="attachedType">ScrEntry</span></a></li>
+    title="hflip=(se: var ScrEntry; val: bool)">hflip=</a></li>
   <li><a class="reference" href="#vflip.t%2CScrEntry"
-    title="vflip(se: ScrEntry): bool"><wbr />vflip<span class="attachedType">ScrEntry</span></a></li>
+    title="vflip(se: ScrEntry): bool">vflip</a></li>
   <li><a class="reference" href="#vflip%3D.t%2CScrEntry%2Cbool"
-    title="vflip=(se: var ScrEntry; val: bool)"><wbr />vflip=<span class="attachedType">ScrEntry</span></a></li>
+    title="vflip=(se: var ScrEntry; val: bool)">vflip=</a></li>
   <li><a class="reference" href="#palbank.t%2CScrEntry"
-    title="palbank(se: ScrEntry): int"><wbr />palbank<span class="attachedType">ScrEntry</span></a></li>
+    title="palbank(se: ScrEntry): int">palbank</a></li>
   <li><a class="reference" href="#palbank%3D.t%2CScrEntry%2Cint"
-    title="palbank=(se: var ScrEntry; val: int)"><wbr />palbank=<span class="attachedType">ScrEntry</span></a></li>
+    title="palbank=(se: var ScrEntry; val: int)">palbank=</a></li>
 
   </ul>
 </li>
@@ -267,16 +310,28 @@ Data for an 8x8 pixel tile at 15bpp, where each pixel is a direct color
 <dd>
 
 <p>A 15bpp (i.e. direct color, 5 bits per channel) tiled background.</p>
-<p>This is not a real format that the GBA uses, but is useful as an intermediate representation before converting to 4bpp.</p>
+<p>This is not a real format that the GBA uses, but is useful as an intermediate representation before converting to 4bpp or 8bpp.</p>
 
+
+</dd>
+<a id="Bg8"></a>
+<dt><pre><a href="bgconvert.html#Bg8"><span class="Identifier">Bg8</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">w</span><span class="Operator">*</span><span class="Other">,</span> <span class="Identifier">h</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>                <span class="Comment">## Dimensions in tiles</span>
+  <span class="Identifier">img</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="bgconvert.html#Tile8"><span class="Identifier">Tile8</span></a><span class="Other">]</span>           <span class="Comment">## Tile/char image data</span>
+  <span class="Identifier">map</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="bgconvert.html#ScrEntry"><span class="Identifier">ScrEntry</span></a><span class="Other">]</span>        <span class="Comment">## Map entries</span>
+  <span class="Identifier">pal</span><span class="Operator">*</span><span class="Other">:</span> <a href="gfxconvert.html#GfxPalette"><span class="Identifier">GfxPalette</span></a>           <span class="Comment">## Palette with up to 256 colors</span>
+  </pre></dt>
+<dd>
+
+An 8bpp tiled background.
 
 </dd>
 <a id="Bg4"></a>
 <dt><pre><a href="bgconvert.html#Bg4"><span class="Identifier">Bg4</span></a> <span class="Other">=</span> <span class="Keyword">object</span>
-  <span class="Identifier">w</span><span class="Operator">*</span><span class="Other">,</span> <span class="Identifier">h</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>                   <span class="Comment">## Dimensions in tiles</span>
-  <span class="Identifier">img</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="bgconvert.html#Tile4"><span class="Identifier">Tile4</span></a><span class="Other">]</span>             <span class="Comment">## Tile/char image data</span>
-  <span class="Identifier">map</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="bgconvert.html#ScrEntry"><span class="Identifier">ScrEntry</span></a><span class="Other">]</span>          <span class="Comment">## Map entries</span>
-  <span class="Identifier">pals</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="gfxconvert.html#GfxPalette"><span class="Identifier">GfxPalette</span></a><span class="Other">]</span>       <span class="Comment">## List of palettes</span>
+  <span class="Identifier">w</span><span class="Operator">*</span><span class="Other">,</span> <span class="Identifier">h</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>                <span class="Comment">## Dimensions in tiles</span>
+  <span class="Identifier">img</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="bgconvert.html#Tile4"><span class="Identifier">Tile4</span></a><span class="Other">]</span>           <span class="Comment">## Tile/char image data</span>
+  <span class="Identifier">map</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="bgconvert.html#ScrEntry"><span class="Identifier">ScrEntry</span></a><span class="Other">]</span>        <span class="Comment">## Map entries</span>
+  <span class="Identifier">pals</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="gfxconvert.html#GfxPalette"><span class="Identifier">GfxPalette</span></a><span class="Other">]</span>     <span class="Comment">## List of palettes</span>
   </pre></dt>
 <dd>
 
@@ -310,8 +365,8 @@ Returns a copy of <tt class="docutils literal"><span class="pre">tile</span></tt
 
 </dd>
 <a id="reduce"></a>
-<dt><pre><span class="Keyword">proc</span> <a href="#reduce"><span class="Identifier">reduce</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="bgconvert.html#SomeTile"><span class="Identifier">SomeTile</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">data</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span> <span class="Operator">|</span> <a href="common.html#View"><span class="Identifier">View</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">tiles</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">map</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="bgconvert.html#ScrEntry"><span class="Identifier">ScrEntry</span></a><span class="Other">]</span><span class="Other">]</span></pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#reduce"><span class="Identifier">reduce</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">:</span> <a href="bgconvert.html#SomeTile"><span class="Identifier">SomeTile</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">data</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span> <span class="Operator">|</span> <a href="common.html#View"><span class="Identifier">View</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">firstBlank</span> <span class="Other">=</span> <span class="Identifier">true</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span>
+    <span class="Identifier">tiles</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">map</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="bgconvert.html#ScrEntry"><span class="Identifier">ScrEntry</span></a><span class="Other">]</span><span class="Other">]</span></pre></dt>
 <dd>
 
 Convert an array of tiles into a minimal tileset with duplicates removed (including horizontally/vertically flipped copies) and a map of tile indexes.
@@ -342,8 +397,8 @@ Set all pixels in a tile to transparent.<ul class="simple"><li>For 4bpp and 8bpp
 
 </dd>
 <a id="getPalettesFromTiles,seq[Tile16]"></a>
-<dt><pre><span class="Keyword">proc</span> <a href="#getPalettesFromTiles%2Cseq%5BTile16%5D"><span class="Identifier">getPalettesFromTiles</span></a><span class="Other">(</span><span class="Identifier">tiles16</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="bgconvert.html#Tile16"><span class="Identifier">Tile16</span></a><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">IntSet</span><span class="Other">]</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma">
-    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">AssertionError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#getPalettesFromTiles%2Cseq%5BTile16%5D"><span class="Identifier">getPalettesFromTiles</span></a><span class="Other">(</span><span class="Identifier">tiles16</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><a href="bgconvert.html#Tile16"><span class="Identifier">Tile16</span></a><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">IntSet</span><span class="Other">]</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
 <p>Create a list containing one palette for each tile in a list of 15bpp direct color tiles.</p>
@@ -353,27 +408,62 @@ Set all pixels in a tile to transparent.<ul class="simple"><li>For 4bpp and 8bpp
 
 </dd>
 <a id="loadBg16,string"></a>
-<dt><pre><span class="Keyword">proc</span> <a href="#loadBg16%2Cstring"><span class="Identifier">loadBg16</span></a><span class="Other">(</span><span class="Identifier">filename</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <a href="bgconvert.html#Bg16"><span class="Identifier">Bg16</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span>
-    <span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#loadBg16%2Cstring"><span class="Identifier">loadBg16</span></a><span class="Other">(</span><span class="Identifier">filename</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">firstBlank</span> <span class="Other">=</span> <span class="Identifier">true</span><span class="Other">)</span><span class="Other">:</span> <a href="bgconvert.html#Bg16"><span class="Identifier">Bg16</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma">
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
-Load a direct color 15bpp tiled background from a PNG file
+<p>Load a direct color 15bpp tiled background from a PNG file.</p>
+<p>Note: this isn't a real format that the GBA uses, but is useful as an intermediate representation before converting to 4bpp or 8bpp.</p>
+
+
+</dd>
+<a id="toBg8,Bg16"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#toBg8%2CBg16"><span class="Identifier">toBg8</span></a><span class="Other">(</span><span class="Identifier">bg16</span><span class="Other">:</span> <a href="bgconvert.html#Bg16"><span class="Identifier">Bg16</span></a><span class="Other">)</span><span class="Other">:</span> <a href="bgconvert.html#Bg8"><span class="Identifier">Bg8</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+Convert a direct color 15bpp background to a paletted 8bpp background.
 
 </dd>
 <a id="toBg4,Bg16"></a>
-<dt><pre><span class="Keyword">proc</span> <a href="#toBg4%2CBg16"><span class="Identifier">toBg4</span></a><span class="Other">(</span><span class="Identifier">bg16</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="bgconvert.html#Bg16"><span class="Identifier">Bg16</span></a><span class="Other">)</span><span class="Other">:</span> <a href="bgconvert.html#Bg4"><span class="Identifier">Bg4</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">AssertionError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#toBg4%2CBg16"><span class="Identifier">toBg4</span></a><span class="Other">(</span><span class="Identifier">bg16</span><span class="Other">:</span> <a href="bgconvert.html#Bg16"><span class="Identifier">Bg16</span></a><span class="Other">)</span><span class="Other">:</span> <a href="bgconvert.html#Bg4"><span class="Identifier">Bg4</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
 Convert a direct color 15bpp background to a paletted 4bpp background.
 
 </dd>
+<a id="loadBg8,string"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#loadBg8%2Cstring"><span class="Identifier">loadBg8</span></a><span class="Other">(</span><span class="Identifier">filename</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">firstBlank</span> <span class="Other">=</span> <span class="Identifier">true</span><span class="Other">)</span><span class="Other">:</span> <a href="bgconvert.html#Bg8"><span class="Identifier">Bg8</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma">
+    <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">PNGError</span><span class="Other">,</span> <span class="Identifier">NZError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+Load an 8bpp paletted tiled background from a PNG file.
+
+</dd>
+<a id="toBg4,Bg8"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#toBg4%2CBg8"><span class="Identifier">toBg4</span></a><span class="Other">(</span><span class="Identifier">bg8</span><span class="Other">:</span> <a href="bgconvert.html#Bg8"><span class="Identifier">Bg8</span></a><span class="Other">)</span><span class="Other">:</span> <a href="bgconvert.html#Bg4"><span class="Identifier">Bg4</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+<p>Strict conversion from 8bpp background to 4bpp background.</p>
+<p>If the 8bpp background has more than 16 colors, then it will be treated as having several palettes (<tt class="docutils literal"><span class="pre">0..15</span></tt>, <tt class="docutils literal"><span class="pre">16..31</span></tt>, <tt class="docutils literal"><span class="pre">32..47</span></tt>, ...).</p>
+<p>Each tile in the image is only allowed to refer to colors from a single one of those palettes.</p>
+
+
+</dd>
 <a id="loadBg4,string"></a>
-<dt><pre><span class="Keyword">proc</span> <a href="#loadBg4%2Cstring"><span class="Identifier">loadBg4</span></a><span class="Other">(</span><span class="Identifier">filename</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <a href="bgconvert.html#Bg4"><span class="Identifier">Bg4</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">AssertionError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span>
-    <span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">RootEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dt><pre><span class="Keyword">proc</span> <a href="#loadBg4%2Cstring"><span class="Identifier">loadBg4</span></a><span class="Other">(</span><span class="Identifier">filename</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">indexed</span> <span class="Other">=</span> <span class="Identifier">false</span><span class="Other">;</span> <span class="Identifier">firstBlank</span> <span class="Other">=</span> <span class="Identifier">true</span><span class="Other">)</span><span class="Other">:</span> <a href="bgconvert.html#Bg4"><span class="Identifier">Bg4</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span>
+    <span class="Identifier">IOError</span><span class="Other">,</span> <span class="Identifier">OSError</span><span class="Other">,</span> <span class="Identifier">PNGError</span><span class="Other">,</span> <span class="Identifier">NZError</span><span class="Other">,</span> <span class="Identifier">Exception</span><span class="Other">,</span> <span class="Identifier">KeyError</span><span class="Other">,</span> <span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span>
+    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ReadIOEffect</span><span class="Other">,</span> <span class="Identifier">WriteIOEffect</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
 <p>Load a 4bpp tiled background from a PNG file.</p>
 <p>The resulting background is ideal for usage on the GBA.</p>
+<p><strong>Parameters:</strong></p>
+<dl class="docutils"><dt>filename</dt>
+<dd>Path to PNG file.</dd>
+<dt>indexed</dt>
+<dd>If true, the palette of the input PNG will be preserved. Otherwise, the input PNG will be loaded as true color, and new palettes will be derived from it.</dd>
+</dl>
 
 
 </dd>
@@ -448,7 +538,7 @@ Which palette is used by this entry (when working with 4bpp tiles)
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2020-05-28 21:57:50 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2021-04-19 00:27:36 UTC</small>
       </div>
     </div>
   </div>
