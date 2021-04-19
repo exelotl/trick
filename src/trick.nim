@@ -136,7 +136,9 @@ Name                                              Type                    Summar
 Name                                                                      Parameters           Returns            Summary
 ========================================================================  ===================  =================  =================================
 `loadBg4<trick/bgconvert.html#loadBg4,string>`_                           *filename*           Bg4                Load a PNG as a 4bpp tiled background
+`loadBg8<trick/bgconvert.html#loadBg8,string>`_                           *filename*           Bg8                Load a PNG as a 8bpp tiled background
 `loadBg16<trick/bgconvert.html#loadBg16,string>`_                         *filename*           Bg16               Load a PNG as a 15bpp (direct color) tiled background
+`toBg4<trick/bgconvert.html#toBg4,Bg8>`_                                  Bg8                  Bg4                Convert a 8bpp background to 4bpp with strict rules
 `toBg4<trick/bgconvert.html#toBg4,Bg16>`_                                 Bg16                 Bg4                Convert a 15bpp (direct color) background to 4bpp (paletted)
 `reduce<trick/bgconvert.html#reduce,seq[T]>`_                             *tiles*              (*tiles*, *map*)   Remove duplicates from a list of tiles, and build a tile map
 `getPalettesFromTiles<trick/bgconvert.html#getPalettesFromTiles>`_        *tiles16*            seq[IntSet]        Get a list of palettes from a list of 15bpp tiles
@@ -148,7 +150,7 @@ Name                                                                      Parame
 
 
 palbuilder
---------------
+----------
 
 This module implements a palette reduction algorithm: Given a list of palettes (of which
 many are duplicates or at least have colors in common), it attempts to merge them down
@@ -176,6 +178,8 @@ Name                                                                     Paramet
 
 mmutil
 ------
+
+*Note: This module is on the chopping block, best not to use.*
 
 Uses the `Maxmod<https://maxmod.devkitpro.org/>`_ utility program (`mmutil<https://github.com/devkitPro/mmutil>`_)
 to produce a soundbank, which is then converted to C. The soundbank header is converted to Nim, for use in your game.

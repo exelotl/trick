@@ -4,7 +4,7 @@
 
 Trick is a library for GBA and NDS asset conversion in Nim.
 
-It can be used as a counterpart to [Natu](https://github.com/exelotl/natu), as an easy way to get images, maps and sounds into your GBA games.
+It is used by the [Natu](https://github.com/exelotl/natu) project tool, providing an easy way to put images, maps and sounds into your GBA games.
 
 It was also used for the [PP20th translation](https://www.romhacking.net/translations/4522/) project, thus is able to convert binary data back to PNG in some cases.
 
@@ -23,8 +23,6 @@ It was also used for the [PP20th translation](https://www.romhacking.net/transla
   - Facilities to reinterpret data as an array of some known type, without copying
   - Convert raw bytes to C strings (a utility borrowed from the Nim compiler)
   - Name helpers: filename to identifier, snake_case to camelCase
-- Audio
-  - Translate [Maxmod](https://maxmod.devkitpro.org/) soundbank headers to Nim
 
 
 ## Overview
@@ -37,12 +35,6 @@ Installation
 $ nimble install trick
 ```
 
-Usage
-
-```nim
-import trick
-```
-
 
 ## Examples
 
@@ -52,6 +44,8 @@ import trick
 Convert your sprite sheets into raw binary formats used by GBA/NDS games:
 
 ```nim
+impor trick
+
 var conf = GfxInfo(
   pal: @[clrEmpty],   # initial palette
   bpp: gfx4bpp,       # bit depth
@@ -137,24 +131,6 @@ import natu, gfxdata
 memcpy32(addr tileMemObj[0], addr marioImg, marioImg.len div sizeof(uint32))
 ```
 
-
-### Soundbank conversion
-
-Create a Maxmod soundbank via `mmutil`. The constants are converted to Nim and the data is converted to C.
-
-You can pass a list of music/sfx files:
-
-```nim
-let soundFiles = ["audio/mysong.xm", "audio/jump.wav"]
-makeSoundbank("source/soundbank.nim", "data/soundbank.c", soundFiles)
-```
-
-Or use a wildcard pattern to process all files in a directory:
-
-```nim
-makeSoundbank("source/soundbank.nim", "data/soundbank.c", "audio/*")
-```
-
 ---
 
 ## Todo
@@ -163,7 +139,7 @@ makeSoundbank("source/soundbank.nim", "data/soundbank.c", "audio/*")
 
 - Ability to convert backgrounds/tilemaps back into PNG
 
-- 8bpp backgrounds, Affine backgrounds
+- Affine backgrounds
 
 - More graphic formats (in particular, NDS 3D texture formats with alpha bits have been implemented by [MyLegGuy](https://github.com/MyLegGuy) for PP20th, but I've yet to merge this code)
 
