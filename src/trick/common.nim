@@ -104,13 +104,14 @@ export ropes.`$`
 
 
 func toCamelCase*(str: string, firstUpper = false): string =
-  ## Convert a string from `snake_case` to `camelCase`.
+  ## Convert a string to `camelCase`.
   ##
   ## ```nim
-  ## echo "foo_bar".toCamelCase()   # fooBar
+  ## echo "foo_bar".toCamelCase()          # fooBar
+  ## echo "glass half-full".toCamelCase()  # glassHalfFull
   ## ```
   ##
-  ## If `first` is true, the first character will be capitalized.
+  ## If `firstUpper` is true, the first character will be capitalized.
   ##
   ## ```nim
   ## echo "foo_bar".toCamelCase(true)   # FooBar
@@ -125,7 +126,7 @@ func toCamelCase*(str: string, firstUpper = false): string =
   ##
   var makeUpper = firstUpper
   for i, c in str:
-    if c == '_':
+    if c notin Letters+Digits:
       makeUpper = true
     elif makeUpper:
       result.add(c.toUpperAscii())
