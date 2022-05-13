@@ -4,7 +4,7 @@
 
 Trick is a library for GBA and NDS asset conversion in Nim.
 
-It is used by the [Natu](https://github.com/exelotl/natu) project tool, providing an easy way to put images, maps and sounds into your GBA games.
+It is used by the [Natu](https://github.com/exelotl/natu) project tool, providing an easy way to put images & maps into your GBA games.
 
 It was also used for the [PP20th translation](https://www.romhacking.net/translations/4522/) project, thus is able to convert binary data back to PNG in some cases.
 
@@ -27,9 +27,9 @@ It was also used for the [PP20th translation](https://www.romhacking.net/transla
 
 ## Overview
 
-Trick is intended for making command-line tools to wrangle assets for your homebrew projects.
+Trick is intended to allow you to make your own command-line tools to wrangle assets for your homebrew projects.
 
-Installation
+### Installation
 
 ```
 $ nimble install trick
@@ -38,13 +38,14 @@ $ nimble install trick
 
 ## Examples
 
+These examples use hardcoded settings and paths, but in practise you'll want to be looping over directories, reading from config files, etc.
 
 ### PNG to binary
 
 Convert your sprite sheets into raw binary formats used by GBA/NDS games:
 
 ```nim
-impor trick
+import trick
 
 var conf = GfxInfo(
   pal: @[clrEmpty],   # initial palette
@@ -136,6 +137,8 @@ memcpy32(addr tileMemObj[0], addr marioImg, marioImg.len div sizeof(uint32))
 ## Todo
 
 - Fonts (currently the only way to produce [TTE](https://www.coranac.com/tonc/text/tte.htm) compatible fonts is [Usenti](http://www.coranac.com/projects/usenti/))
+
+- ASM output?
 
 - Ability to convert backgrounds/tilemaps back into PNG
 
