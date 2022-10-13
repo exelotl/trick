@@ -181,7 +181,7 @@ iterator tileEncode*(width, height: int, bpp=gfx8bpp, tileWidth=8, tileHeight=8)
           tx = 0
           ty += 1
 
-proc binToPng*(data: string, conf: GfxInfo): PNG =
+proc binToPng*(data: sink string, conf: GfxInfo): PNG =
   ## Convert raw GBA/NDS graphics data to a PNG object
   var encoder = makePNGEncoder()
   var colorMode = newColorMode(LCT_PALETTE, ord(conf.bpp))
@@ -211,7 +211,7 @@ proc binToPng*(data: string, conf: GfxInfo): PNG =
       for i, j in tileEncode(width, height, conf.bpp):
         pngData[j] = data[i]
     of gfxBitmap:
-      shallowCopy(pngData, data)
+      pngData = data
   
   # correct pixel endianness within bytes
   case conf.bpp
