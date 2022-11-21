@@ -239,15 +239,22 @@ proc readPng*(filename: string): PNG[string] =
   result = decodePNG(string, stream)
   stream.close()
 
+type PaletteGrowthMode* = enum
+  NoGrowth
+    ## The PNG's palette must be exactly the same as `conf.pal`.
+  LaxGrowth
+    ## New colors will be added to `conf.pal`, duplicate colours will be remapped.
+  StrictGrowth
+    ## Can grow `conf.pal`, but any colors already in `conf.pal` must
+    ## appear in the same order as in the PNG's palette.
 
-proc pngToBin*(filename: string, conf: var GfxInfo, buildPal: bool): string =
+proc pngToBin*(filename: string, conf: var GfxInfo, growth: PaletteGrowthMode): string =
   ## Load a PNG by filename and convert to GBA/NDS image data.
   ##
   ## Pixels are returned as a string of raw binary data.
-  ## Fields of `conf` will be modified to include any additional data such as image width.
-  ##
-  ## If `buildPal` is true, unique colors will be added to `conf.pal`.
-  ## Otherwise new colors are considered an error.
+  ## 
+  ## Fields of `conf` will be modified to include any additional data such as
+  ## image width, or to grow the palette as specified by `growth`.
   
   let png = readPng(filename)
   let info = png.getInfo()
@@ -272,7 +279,7 @@ proc pngToBin*(filename: string, conf: var GfxInfo, buildPal: bool): string =
     let index = conf.pal.find(color)
     if index == -1:
       # extend the palette if we are allowed to
-      if buildPal:
+      if growth != NoGrowth:
         conf.pal.add(color)
         (conf.pal.len-1).uint8
       else:
@@ -331,32 +338,30 @@ proc pngToBin*(filename: string, conf: var GfxInfo, buildPal: bool): string =
       else:
         pal.add rgb8(ord(c.r), ord(c.g), ord(c.b))
     
-    const strictPaletteGrowth = false  # preserve png palette exactly - could make this into an option later?
-    
-    if buildPal:
-      if strictPaletteGrowth:
-        # We can grow conf.pal, but any colors already in conf.pal
-        # must appear in the same order as in the PNG palette.
-        for i in 0 ..< min(conf.pal.len, pal.len):
-          doAssert(
-            conf.pal[i] == pal[i],
-            "Mismatch between GfxInfo palette (" & $conf.pal[i] &
-              ") and PNG palette (" & $pal[i] &
-              ") at index " & $i & " (" & filename & ")")
-        for i in conf.pal.len ..< pal.len:
-          conf.pal.add(pal[i])
-      else:
-        # Loop over PNG pal and only add colors if they don't already exist in conf.pal
-        # This then requires remapping to be done either during or after `fillData()`
-        for color in pal:
-          if color notin conf.pal:
-            conf.pal.add(color)
-    else:
+    case growth
+    of NoGrowth:
       doAssert(conf.pal == pal)
+    of LaxGrowth:
+      # Loop over PNG pal and only add colors if they don't already exist in conf.pal
+      # This then requires remapping to be done either during or after `fillData()`
+      for color in pal:
+        if color notin conf.pal:
+          conf.pal.add(color)
+    of StrictGrowth:
+      # We can grow conf.pal, but any colors already in conf.pal
+      # must appear in the same order as in the PNG palette.
+      for i in 0 ..< min(conf.pal.len, pal.len):
+        doAssert(
+          conf.pal[i] == pal[i],
+          "Mismatch between GfxInfo palette (" & $conf.pal[i] &
+            ") and PNG palette (" & $pal[i] &
+            ") at index " & $i & " (" & filename & ")")
+      for i in conf.pal.len ..< pal.len:
+        conf.pal.add(pal[i])
     
     case mode.bitDepth
     of 8:
-      if strictPaletteGrowth:
+      if growth in {NoGrowth, StrictGrowth}:
         fillData(getPixelIndexed8Direct)
       else:
         fillData(getPixelIndexed8)
@@ -380,3 +385,7 @@ proc pngToBin*(filename: string, conf: var GfxInfo, buildPal: bool): string =
   of gfxBitmap:
     result = data
 
+proc pngToBin*(filename: string, conf: var GfxInfo, buildPal: bool): string =
+  ## Legacy version of `pngToBin`.
+  let growth = if buildPal: LaxGrowth else: NoGrowth
+  pngToBin(filename, conf, growth)
