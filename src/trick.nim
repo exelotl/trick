@@ -181,36 +181,6 @@ Name                                                                     Paramet
 `joinPalettes<trick/palbuilder.html#joinPalettes,seq[GfxPalette]>`_      seq[GfxPalette]  GfxPalette                   Concatenate several palettes into one (with padding)
 =======================================================================  ===============  ===========================  ====================================================
 
-
-mmutil
-------
-
-*Note: This module is on the chopping block, best not to use.*
-
-Uses the `Maxmod<https://maxmod.devkitpro.org/>`_ utility program (`mmutil<https://github.com/devkitPro/mmutil>`_)
-to produce a soundbank, which is then converted to C. The soundbank header is converted to Nim, for use in your game.
-
-`Go to full docs ⇒<trick/mmutil.html>`_
-
-.. raw:: html
-  <h4>Procedures</h4>
-
-================================================================  ==================================  =========  ====================================================
-Name                                                              Parameters                          Returns    Summary
-================================================================  ==================================  =========  ====================================================
-`makeSoundbank<trick/mmutil.html#makeSoundbank,string,string,>`_  | *nimOutputPath*, *cOutputPath*,              Create a soundbank from a list of audio files
-                                                                  | *inputFiles*, *nds=false*                    
-================================================================  ==================================  =========  ====================================================
-
-.. raw:: html
-  <h4>Variables</h4>
-
-================================================  =============  =====================================================
-Name                                              Type           Summary
-================================================  =============  =====================================================
-`mmutilPath<trick/mmutil.html#mmutilPath>`_       string         Location of the `mmutil<https://github.com/devkitPro/mmutil>`_ executable. You shouldn't need to change this.
-================================================  =============  =====================================================
-
 ]##
 
 import trick/[common, gfxconvert, bgconvert, palbuilder, mmutil]
