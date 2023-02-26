@@ -51,6 +51,13 @@ type
     img*: seq[Tile4]        ## Tile/char image data
     map*: seq[ScrEntry]     ## Map entries
     pals*: seq[GfxPalette]  ## List of palettes
+  
+  BgAff* = object
+    ## An 8bpp tiled background with a map of only simple indexes.
+    w*, h*: int             ## Dimensions in tiles
+    img*: seq[Tile8]        ## Tile/char image data
+    map*: seq[uint8]        ## Map entries (just simple tile indexes)
+    pal*: GfxPalette        ## Palette with up to 256 colors
 
 # Screen-entry Flags
 const
@@ -199,7 +206,38 @@ proc reduce*[T:SomeTile](data: seq[T]|View[T], firstBlank=true): tuple[tiles: se
       map.add(se)    # add entry to map
       tiles.add(t)   # add tile to tileset
   
-  return (tiles, map)
+  (tiles, map)
+
+
+proc reduceAff*[T:SomeTile](data: seq[T]|View[T], firstBlank=true): tuple[tiles: seq[T], map: seq[uint8]] =
+  ## Convert an array of tiles into a minimal tileset with duplicates removed.
+  ## The resulting map has only indices, no palette or flip bits, and symmetrical tiles in the tileset will not be handled.
+  
+  var dictionary: Table[T, uint8]  # mapping from tiles to their index
+  var tiles: seq[T]
+  var map: seq[uint8]
+  
+  if firstBlank:
+    # add empty tile to tileset and dictionary
+    var t: T
+    when t is Tile16:
+      for px in mitems(t):
+        px = clrEmpty
+    tiles.add(t)
+    dictionary[t] = 0'u8
+  
+  for t in data:
+    dictionary.withValue(t, se) do:
+      # tile exists, add entry to map
+      map.add(dictionary[t])
+    do:
+      # tile doesn't exist in any orientation, so let's add all of them to the dictonary
+      let id = tiles.len.uint8
+      dictionary[t] = id
+      map.add(id)    # add entry to map
+      tiles.add(t)   # add tile to tileset
+  
+  (tiles, map)
 
 
 proc toScreenBlocks*(map: seq[ScrEntry]; w: int): seq[Screenblock] =
@@ -477,7 +515,6 @@ proc loadBg4*(filename: string, indexed=false, firstBlank=true): Bg4 =
   ##   Otherwise, the input PNG will be loaded as true color,
   ##   and new palettes will be derived from it.
   ## 
-  
   if indexed:
     var bg = loadBg8(filename, firstBlank)
     bg.toBg4()
@@ -485,6 +522,83 @@ proc loadBg4*(filename: string, indexed=false, firstBlank=true): Bg4 =
     var bg = loadBg16(filename, firstBlank)
     bg.toBg4()
 
+
+proc toBgAff*(bg16: Bg16): BgAff =
+  ## Convert a direct color 15bpp background to an affine background.
+  
+  doAssert(bg16.img.len <= 256, "Affine backgrounds can't have more than 256 tiles.")
+  
+  # mapping of colors to their position in the palette
+  var colorIndexes: OrderedTable[GfxColor, int]
+  
+  # first color is transparent
+  colorIndexes[clrEmpty] = 0
+  
+  # convert the tileset from 15bpp to 8bpp
+  var img8 = newSeq[Tile8](bg16.img.len)
+  for i, tile in bg16.img:
+    for j, color in tile:
+      var index = colorIndexes.getOrDefault(color, -1)
+      if index == -1:
+        index = colorIndexes.len
+        colorIndexes[color] = index
+      img8[i][j] = index.uint8
+  
+  var pal: GfxPalette
+  for color in keys(colorIndexes):
+    pal.add(color)
+  
+  doAssert(pal.len <= 256)
+  
+  var map: seq[uint8]
+  for se in bg16.map:
+    map.add(se.tid.uint8)
+  
+  result.w = bg16.w
+  result.h = bg16.h
+  result.img = img8
+  result.map = map
+  result.pal = pal
+
+proc loadBgAff*(filename: string, firstBlank = true): BgAff =
+  ## Load an affine background from a PNG file.
+  
+  let png = readPng(filename)
+  let info = png.getInfo()
+  let pngPal = info.mode.palette
+  
+  if pngPal.len == 0:
+    # Load a direct color image then convert to 8bpp paletted.
+    result = loadBg16(filename).toBgAff()
+  
+  else:
+    var pal: GfxPalette
+    for c in pngPal:
+      if ord(c.a) == 0:
+        pal.add clrEmpty
+      else:
+        pal.add rgb8(ord(c.r), ord(c.g), ord(c.b))
+    
+    doAssert(pal.len <= 256)
+    
+    let pixels = png.pixels
+    let numPixels = info.width * info.height
+    
+    let numTiles = numPixels div (8*8)
+    var tiles = newSeq[Tile8](numTiles)
+    let tilesAsPixels = viewSeqAs[char, Tile8](tiles) 
+    
+    for i, j in tileEncode(info.width, info.height):
+      tilesAsPixels[i] = pixels[j]
+    
+    # reduce to 8bpp tileset + map
+    var (img8, map) = reduceAff(tiles)
+    doAssert(img8.len <= 256, "Affine backgrounds can't have more than 256 tiles.")
+    result.w = info.width div 8
+    result.h = info.height div 8
+    result.img = img8
+    result.map = map
+    result.pal = pal
 
 
 # Tile reduction tests

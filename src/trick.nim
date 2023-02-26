@@ -125,8 +125,10 @@ Name                                              Type                    Summar
 `SomeTile<trick/bgconvert.html#SomeTile>`_        Tile4 | Tile8 | Tile16  Typeclass for any kind of tile
 `ScrEntry<trick/bgconvert.html#ScrEntry>`_        distinct uint16         Tile index with palette and flipping flags (via getters/setters)
 `Screenblock<trick/bgconvert.html#Screenblock>`_  array[1024, ScrEntry]   A block of 32x32 screen entries
-`Bg4<trick/bgconvert.html#Bg4>`_                  object                  4bpp tiled background with a list of palettes
-`Bg16<trick/bgconvert.html#Bg16>`_                object                  16bpp high-color tiled background (used for processing/conversion)
+`Bg4<trick/bgconvert.html#Bg4>`_                  object                  4bpp tiled background with a list of 16-color palettes
+`Bg8<trick/bgconvert.html#Bg8>`_                  object                  8bpp tiled background with a single 256-color palette
+`Bg16<trick/bgconvert.html#Bg16>`_                object                  15bpp direct-color tiled background (used for processing/conversion)
+`BgAff<trick/bgconvert.html#BgAff>`_              object                  8bpp affine tiled background
 ================================================  ======================  =====================================================
 
 .. raw:: html
@@ -138,9 +140,13 @@ Name                                                                      Parame
 `loadBg4<trick/bgconvert.html#loadBg4,string>`_                           *filename*           Bg4                Load a PNG as a 4bpp tiled background
 `loadBg8<trick/bgconvert.html#loadBg8,string>`_                           *filename*           Bg8                Load a PNG as a 8bpp tiled background
 `loadBg16<trick/bgconvert.html#loadBg16,string>`_                         *filename*           Bg16               Load a PNG as a 15bpp (direct color) tiled background
+`loadBgAff<trick/bgconvert.html#loadBgAff,string>`_                       *filename*           BgAff              Load a PNG as an affine background
 `toBg4<trick/bgconvert.html#toBg4,Bg8>`_                                  Bg8                  Bg4                Convert a 8bpp background to 4bpp with strict rules
 `toBg4<trick/bgconvert.html#toBg4,Bg16>`_                                 Bg16                 Bg4                Convert a 15bpp (direct color) background to 4bpp (paletted)
-`reduce<trick/bgconvert.html#reduce,seq[T]>`_                             *tiles*              (*tiles*, *map*)   Remove duplicates from a list of tiles, and build a tile map
+`toBg8<trick/bgconvert.html#toBg8,Bg16>`_                                 Bg16                 Bg8                Convert a 15bpp (direct color) background to 8bpp (paletted)
+`toBgAff<trick/bgconvert.html#toBgAff,Bg16>`_                             Bg16                 BgAff              Convert a 15bpp (direct color) background to affine
+`reduce<trick/bgconvert.html#reduce,seq[T]>`_                             *tiles*              (*tiles*, *map*)   Remove duplicates from a list of tiles and build a tile map
+`reduceAff<trick/bgconvert.html#reduceAff,seq[T]>`_                       *tiles*              (*tiles*, *map*)   Remove duplicates from a list of tiles and build an affine map
 `getPalettesFromTiles<trick/bgconvert.html#getPalettesFromTiles>`_        *tiles16*            seq[IntSet]        Get a list of palettes from a list of 15bpp tiles
 `toScreenBlocks<trick/bgconvert.html#toScreenBlocks,seq[ScrEntry],int>`_  *map*, *w*           seq[Screenblock]   Arrange a map into screenblocks (chunks of 32x32 tiles)
 `flipX<trick/bgconvert.html#flipX,T>`_                                    *tile*               *tile*             Flip a tile horizontally
