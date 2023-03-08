@@ -142,8 +142,6 @@ memcpy32(addr tileMemObj[0], addr marioImg, marioImg.len div sizeof(uint32))
 
 - Ability to convert backgrounds/tilemaps back into PNG
 
-- Affine backgrounds
-
 - More graphic formats (in particular, NDS 3D texture formats with alpha bits have been implemented by [MyLegGuy](https://github.com/MyLegGuy) for PP20th, but I've yet to merge this code)
 
-- Metatiles? Currently, sprite sheets must be supplied as a vertical strip (i.e. 1 frame wide, N frames tall). This is maybe unconventional, but an advantage is you can guarantee no space in the spritesheet is wasted.
+- Metatiles?
