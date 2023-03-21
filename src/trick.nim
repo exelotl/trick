@@ -183,6 +183,6 @@ Name                                                                     Paramet
 
 ]##
 
-import trick/[common, gfxconvert, bgconvert, palbuilder, mmutil]
+import trick/[common, gfxconvert, bgconvert, palbuilder, mmutil, compress]
 
-export common, gfxconvert, bgconvert, palbuilder, mmutil
+export common, gfxconvert, bgconvert, palbuilder, mmutil, compress
