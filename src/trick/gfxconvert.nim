@@ -309,6 +309,12 @@ proc pngToBin*(filename: string, conf: var GfxInfo, growth: PaletteGrowthMode): 
     else:
       findOrAddColor rgb8(pixels[i].int, pixels[i+1].int, pixels[i+2].int)
   
+  template getPixelRGB8(n: int): uint8 =
+    ## Get the Nth 24-bit RGB pixel in the PNG data
+    ## Convert to 15-bit BGR and return its index in the palette
+    let i = n*3
+    findOrAddColor rgb8(pixels[i].int, pixels[i+1].int, pixels[i+2].int)
+  
   template fillData(getPixel: untyped) =
     ## Fill the output bytes with palette entries according to bit depth
     case conf.bpp
@@ -374,6 +380,13 @@ proc pngToBin*(filename: string, conf: var GfxInfo, growth: PaletteGrowthMode): 
       fillData(getPixelRGBA8)
     else:
       raiseAssert("Unsupported bit depth " & $mode.bitDepth & " for RGBA color mode (" & filename & ")")
+  
+  of LCT_RGB:
+    case mode.bitDepth
+    of 8:
+      fillData(getPixelRGB8)
+    else:
+      raiseAssert("Unsupported bit depth " & $mode.bitDepth & " for RGB color mode (" & filename & ")")
   else:
     raiseAssert("Unsupported color type " & $mode.colorType & " (" & filename & ")")
   
