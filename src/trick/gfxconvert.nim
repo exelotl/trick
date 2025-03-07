@@ -264,8 +264,9 @@ proc pngToBin*(filename: string, conf: var GfxInfo, growth: PaletteGrowthMode): 
   let numPixels = info.width * info.height
   let numBytes = numPixels div (8 div ord(conf.bpp))
   
-  # update width in case the user of this procedure wants to know.
+  # update dimensions in case the user of this procedure wants to know.
   conf.width = info.width
+  conf.height = info.height
   
   # initialise the output data
   var data = newString(numBytes)
