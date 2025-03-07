@@ -16,8 +16,8 @@ type
     ##
     ## *Not GC safe!* Do not attempt to use this after the original data has gone out of scope or otherwise been deallocated.
     ##
-    len: int
-    data: ptr UncheckedArray[T]
+    len*: int  # make public
+    data*: ptr UncheckedArray[T]
 
 proc `[]`*[T](a: View[T], i: int): var T =
   ## Retrieve an element from the View by index.
