@@ -271,6 +271,17 @@ proc pngToBin*(filename: string, conf: var GfxInfo, growth: PaletteGrowthMode): 
   # initialise the output data
   var data = newString(numBytes)
   
+  proc get4(s: string, n: int): int =
+    if (n and 0b1) == 0:
+      s[n shr 1].int shr 4
+    else:
+      s[n shr 1].int and 0x0f
+  
+  template getPixelIndexed4Direct(n: int): uint8 =
+    let index = pixels.get4(n)
+    doAssert(index < pngPal.len, "Index is outside the bounds of the PNG's palette. (" & filename & ")")
+    index.uint8
+  
   template getPixelIndexed8Direct(n: int): uint8 =
     let index = pixels[n].int
     doAssert(index < pngPal.len, "Index is outside the bounds of the PNG's palette. (" & filename & ")")
@@ -287,6 +298,13 @@ proc pngToBin*(filename: string, conf: var GfxInfo, growth: PaletteGrowthMode): 
         raiseAssert("Encountered a color (" & $color & ") which does not exist in the specified palette (" & filename & ")")
     else:
       index.uint8
+  
+  template getPixelIndexed4(n: int): uint8 =
+    let i = pixels.get4(n)
+    doAssert(i < pngPal.len, "Index is outside the bounds of the PNG's palette. (" & filename & ")")
+    let c = pngPal[i]
+    if c.a == 0.char: 0.uint8
+    else: findOrAddColor rgb8(ord(c.r), ord(c.g), ord(c.b))
   
   template getPixelIndexed8(n: int): uint8 =
     ## Get the colour of the Nth 8-bit indexed pixel in the PNG data
@@ -367,6 +385,11 @@ proc pngToBin*(filename: string, conf: var GfxInfo, growth: PaletteGrowthMode): 
         conf.pal.add(pal[i])
     
     case mode.bitDepth
+    of 4:
+      if growth in {NoGrowth, StrictGrowth}:
+        fillData(getPixelIndexed4Direct)
+      else:
+        fillData(getPixelIndexed4)
     of 8:
       if growth in {NoGrowth, StrictGrowth}:
         fillData(getPixelIndexed8Direct)
