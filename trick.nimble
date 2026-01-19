@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.1.10"
+version       = "0.1.11"
 author        = "exelotl"
 description   = "GBA image conversion library and more"
 license       = "zlib"
