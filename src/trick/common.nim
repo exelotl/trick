@@ -62,7 +62,7 @@ proc toBytes*[T](a: View[T]): string =
   result = newString(a.len * sizeof(T))
   copyMem(result, a.data, result.len)
 
-proc toBytes*[T](s: seq[T]): string =
+proc toBytes*[T](s: openArray[T]): string =
   ## Convert a sequence to a string of bytes.
   result = newString(s.len * sizeof(T))
   copyMem(addr result[0], unsafeAddr s[0], result.len)
