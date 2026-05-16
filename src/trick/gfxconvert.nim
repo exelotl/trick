@@ -192,7 +192,7 @@ proc binToPng*(data: sink string, conf: GfxInfo): PNG[string] =
       (color.r * 256) div 32,
       (color.g * 256) div 32,
       (color.b * 256) div 32,
-      255
+      if color == clrEmpty: 0 else: 255
     )
   encoder.modeIn = colorMode
   encoder.modeOut = colorMode
